@@ -16,17 +16,17 @@ public class App {
 
     public static void main(String[] args) {
         /* A veces funcion el rol con false otras ¿no?*/
-//        java.awt.EventQueue.invokeLater(() -> {
-//            // Crea el diálogo con el JFrame principal como padre (o null si no hay)
-//            Login dialog = new Login(null, true); // true = modal
-//            dialog.setVisible(true);
-//        });
+        java.awt.EventQueue.invokeLater(() -> {
+            // Crea el diálogo con el JFrame principal como padre (o null si no hay)
+            Login dialog = new Login(null, true); // true = modal
+            dialog.setVisible(true);
+        });
 
 // Pruebas
-        java.awt.EventQueue.invokeLater(() -> {
-            SalesManagement sales = new SalesManagement();
-            sales.setVisible(true);
-        });
+//        java.awt.EventQueue.invokeLater(() -> {
+//            Seller seller= new Seller();
+//            seller.setVisible(true);
+//        });
 
     }
 }

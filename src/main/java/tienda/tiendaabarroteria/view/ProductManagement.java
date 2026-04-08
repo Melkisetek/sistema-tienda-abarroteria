@@ -7,23 +7,25 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import tienda.tiendaabarroteria.controller.ProductoController;
 
 public class ProductManagement extends javax.swing.JFrame {
+
     // *** singleton implementar *** 
     // 1. La instancia única y estática
-
     private static ProductManagement instance;
+
+    // A. Agrega este atributo
+    private final ProductoController controlador;
 
     // 2. El constructor ahora es PRIVADO (nadie puede hacer 'new' desde fuera)
     private ProductManagement() {
         initComponents();
         setLocationRelativeTo(this);
-        ProductoController productoController = new ProductoController(this);
+        // B. Guarda la instancia aquí
+        this.controlador = new ProductoController(this);
         miTabla();
-        
     }
 
     // 3. Método para obtener la instancia única
@@ -32,6 +34,11 @@ public class ProductManagement extends javax.swing.JFrame {
             instance = new ProductManagement();
         }
         return instance;
+    }
+
+    // C. Crea un Getter para que Category pueda obtenerlo
+    public ProductoController getControlador() {
+        return this.controlador;
     }
 
     @SuppressWarnings("unchecked")
@@ -60,6 +67,8 @@ public class ProductManagement extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        stockMinimo = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -173,7 +182,7 @@ public class ProductManagement extends javax.swing.JFrame {
 
         categoria.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         categoria.setForeground(new java.awt.Color(0, 128, 128));
-        categoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bebida", "Lácteo", "Golosina", "Pan", " " }));
+        categoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "item" }));
         categoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 categoriaActionPerformed(evt);
@@ -196,7 +205,7 @@ public class ProductManagement extends javax.swing.JFrame {
 
         cantidad.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
         cantidad.setForeground(new java.awt.Color(0, 128, 128));
-        jPanel4.add(cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 0, 230, 40));
+        jPanel4.add(cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 10, 230, 40));
 
         jLabel5.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 128, 128));
@@ -217,7 +226,7 @@ public class ProductManagement extends javax.swing.JFrame {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        jPanel4.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 150, 140, 50));
+        jPanel4.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 190, 140, 50));
 
         btnAgregar.setBackground(new java.awt.Color(0, 128, 128));
         btnAgregar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
@@ -228,7 +237,7 @@ public class ProductManagement extends javax.swing.JFrame {
                 btnAgregarActionPerformed(evt);
             }
         });
-        jPanel4.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 150, 140, 50));
+        jPanel4.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 140, 50));
 
         btnEditar.setBackground(new java.awt.Color(0, 128, 128));
         btnEditar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
@@ -239,35 +248,44 @@ public class ProductManagement extends javax.swing.JFrame {
                 btnEditarActionPerformed(evt);
             }
         });
-        jPanel4.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 150, 140, 50));
+        jPanel4.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, 140, 50));
 
         btnEliminar.setBackground(new java.awt.Color(0, 128, 128));
         btnEliminar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("ELIMINAR");
-        jPanel4.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 150, 140, 50));
+        jPanel4.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 190, 140, 50));
 
         jLabel6.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 128, 128));
         jLabel6.setText("PRECIO");
         jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 80, -1, -1));
 
-        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 990, 220));
+        jLabel8.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 128, 128));
+        jLabel8.setText("STOCK MÍNIMO");
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 140, -1, -1));
+
+        stockMinimo.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
+        stockMinimo.setForeground(new java.awt.Color(0, 128, 128));
+        jPanel4.add(stockMinimo, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 130, 230, 40));
+
+        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 990, 260));
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
         jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "NOMBRE", "PRECIO", "STOCK", "CATEGORIA"
+                "ID", "NOMBRE", "PRECIO", "STOCK", "CATEGORIA", "STOCK MÍNIMO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -344,7 +362,7 @@ public class ProductManagement extends javax.swing.JFrame {
         jTable1.setRowHeight(30);
 
     }
-    
+
     // Getters 
     public JButton getBtnAgregar() {
         return btnAgregar;
@@ -382,11 +400,16 @@ public class ProductManagement extends javax.swing.JFrame {
         return precio;
     }
 
+    public JTextField getStockMinimo() {
+        return stockMinimo;
+    }
+
     // limpiar campos
     public void limpiarCampos() {
         nombre.setText("");
         cantidad.setText("");
         precio.setText("");
+        stockMinimo.setText("");
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -401,6 +424,7 @@ public class ProductManagement extends javax.swing.JFrame {
         nombre.setText("");
         cantidad.setText("");
         precio.setText("");
+        stockMinimo.setText("");
     }//GEN-LAST:event_btnLimpiarMouseClicked
 
     private void categoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaActionPerformed
@@ -412,7 +436,7 @@ public class ProductManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGestionarVentasActionPerformed
 
     private void btnGestionarVentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGestionarVentasMouseClicked
-     java.awt.EventQueue.invokeLater(() -> {
+        java.awt.EventQueue.invokeLater(() -> {
             SalesManagement ventas = new SalesManagement();
             ventas.setVisible(true);
             this.dispose();
@@ -491,6 +515,7 @@ public class ProductManagement extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -500,5 +525,6 @@ public class ProductManagement extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField nombre;
     private javax.swing.JTextField precio;
+    private javax.swing.JTextField stockMinimo;
     // End of variables declaration//GEN-END:variables
 }

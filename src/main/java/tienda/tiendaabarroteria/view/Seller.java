@@ -1,23 +1,58 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package tienda.tiendaabarroteria.view;
 
-/**
- *
- * @author melquisedec
- */
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import tienda.tiendaabarroteria.controller.SellerController;
+
 public class Seller extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Seller
-     */
     public Seller() {
         initComponents();
         setLocationRelativeTo(this);
+        SellerController sellerController = new SellerController(this);
+    }
+    
+    // Getters
+
+    public JButton getBtnAgregar() {
+        return btnAgregar;
     }
 
+    public JButton getBtnEditar() {
+        return btnEditar;
+    }
+
+    public JButton getBtnEliminar() {
+        return btnEliminar;
+    }
+
+    public JButton getBtnLimpiar() {
+        return btnLimpiar;
+    }
+
+    public JTextField getContrasenia() {
+        return contrasenia;
+    }
+
+    public JTable getjTable() {
+        return jTable;
+    }
+
+    public JTextField getNombre() {
+        return nombre;
+    }
+
+    public JComboBox<String> getSexo() {
+        return sexo;
+    }
+    
+
+    public void limpiarCampo(){
+        nombre.setText("");
+        contrasenia.setText("");
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,7 +80,7 @@ public class Seller extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -107,7 +142,7 @@ public class Seller extends javax.swing.JFrame {
 
         sexo.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         sexo.setForeground(new java.awt.Color(0, 128, 128));
-        sexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MASCULINO\t", "FEMENINO\t" }));
+        sexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MASCULINO", "FEMENINO" }));
         sexo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sexoActionPerformed(evt);
@@ -176,8 +211,8 @@ public class Seller extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -195,12 +230,12 @@ public class Seller extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jTable1.setRowHeight(30);
-        jTable1.setRowMargin(4);
-        jTable1.setSelectionBackground(new java.awt.Color(0, 128, 128));
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane2.setViewportView(jTable1);
+        jTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jTable.setRowHeight(30);
+        jTable.setRowMargin(4);
+        jTable.setSelectionBackground(new java.awt.Color(0, 128, 128));
+        jTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(jTable);
 
         jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 22)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 128, 128));
@@ -337,7 +372,7 @@ public class Seller extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable;
     private javax.swing.JTextField nombre;
     private javax.swing.JComboBox<String> sexo;
     // End of variables declaration//GEN-END:variables

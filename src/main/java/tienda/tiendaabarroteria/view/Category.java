@@ -1,15 +1,70 @@
 package tienda.tiendaabarroteria.view;
 
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
+import tienda.tiendaabarroteria.controller.CategoryController;
+import tienda.tiendaabarroteria.controller.ProductoController;
+import tienda.tiendaabarroteria.controller.SalesManagementController;
 
 public class Category extends javax.swing.JFrame {
+    
 
     public Category() {
         initComponents();
         setLocationRelativeTo(this);
+        // D. NO USES 'new ProductoController'. Usa el que ya existe:
+          ProductoController controlExistente = ProductManagement.getInstance().getControlador();
+          // E. Pásalo al CategoryController
+        CategoryController categoryController = new CategoryController(this, controlExistente);
+    }
+    
+        //Getters
+
+    public JButton getBtnAgregar() {
+        return btnAgregar;
     }
 
-    @SuppressWarnings("unchecked")
+    public JButton getBtnEditar() {
+        return btnEditar;
+    }
+
+    public JButton getBtnEliminar() {
+        return btnEliminar;
+    }
+
+    public JButton getBtnLimpiar() {
+        return btnLimpiar;
+    }
+    
+    
+    public JTable getTable() {
+
+        return jTable1;
+    }
+
+    public JTextField getTextCategoria() {
+        return textCategoria;
+    }
+
+    public JTextField getTextID() {
+        return textID;
+    }
+    
+    public JTextArea getTxtArea() {    
+        return txtArea;
+    }
+    
+    public void limpiarCampo(){
+        textID.setText("");
+        textCategoria.setText("");
+        txtArea.setText("");
+    }
+
+    @SuppressWarnings(value = "unchecked")
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -23,15 +78,13 @@ public class Category extends javax.swing.JFrame {
         textID = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        btnAgregar1 = new javax.swing.JButton();
-        btnEditar1 = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtArea = new javax.swing.JTextArea();
         btnEliminar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
-        textStockMinimo = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        textCategoria1 = new javax.swing.JTextField();
+        textCategoria = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -99,6 +152,7 @@ public class Category extends javax.swing.JFrame {
 
         textID.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
         textID.setForeground(new java.awt.Color(0, 128, 128));
+        textID.setEnabled(false);
         textID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textIDActionPerformed(evt);
@@ -109,41 +163,41 @@ public class Category extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 128, 128));
         jLabel6.setText("ID");
-        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, -1, -1));
+        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 128, 128));
         jLabel7.setText("CATEGORÍA NOMBRE");
         jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, -1, -1));
 
-        btnAgregar1.setBackground(new java.awt.Color(0, 128, 128));
-        btnAgregar1.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        btnAgregar1.setForeground(new java.awt.Color(255, 255, 255));
-        btnAgregar1.setText("AGREGAR");
-        jPanel3.add(btnAgregar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 270, 140, 50));
+        btnAgregar.setBackground(new java.awt.Color(0, 128, 128));
+        btnAgregar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregar.setText("AGREGAR");
+        jPanel3.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 140, 50));
 
-        btnEditar1.setBackground(new java.awt.Color(0, 128, 128));
-        btnEditar1.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        btnEditar1.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditar1.setText("EDITAR");
-        btnEditar1.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar.setBackground(new java.awt.Color(0, 128, 128));
+        btnEditar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btnEditar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEditar.setText("EDITAR");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditar1ActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnEditar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 270, 140, 50));
+        jPanel3.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, 140, 50));
 
         txtArea.setColumns(20);
         txtArea.setRows(5);
         jScrollPane1.setViewportView(txtArea);
 
-        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 150, 340, 90));
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 100, 340, 110));
 
         btnEliminar.setBackground(new java.awt.Color(0, 128, 128));
         btnEliminar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("ELIMINAR");
-        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 270, 140, 50));
+        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 220, 140, 50));
 
         btnLimpiar.setBackground(new java.awt.Color(0, 128, 128));
         btnLimpiar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
@@ -159,27 +213,18 @@ public class Category extends javax.swing.JFrame {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 270, 140, 50));
+        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 220, 140, 50));
 
-        textStockMinimo.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
-        textStockMinimo.setForeground(new java.awt.Color(0, 128, 128));
-        jPanel3.add(textStockMinimo, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 100, 340, 40));
-
-        jLabel8.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 128, 128));
-        jLabel8.setText("STOCK MÍNIMO");
-        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, -1, -1));
-
-        textCategoria1.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
-        textCategoria1.setForeground(new java.awt.Color(0, 128, 128));
-        jPanel3.add(textCategoria1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 50, 340, 40));
+        textCategoria.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
+        textCategoria.setForeground(new java.awt.Color(0, 128, 128));
+        jPanel3.add(textCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 50, 340, 40));
 
         jLabel9.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 128, 128));
         jLabel9.setText("DESCRIPCIÓN");
-        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, -1, -1));
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, -1, -1));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 990, 340));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 990, 280));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -187,7 +232,6 @@ public class Category extends javax.swing.JFrame {
         jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"1", "Golosina", "Recitos, galletas, dulces"},
                 {null, null, null},
                 {null, null, null},
                 {null, null, null}
@@ -211,9 +255,9 @@ public class Category extends javax.swing.JFrame {
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jTable1);
 
-        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 0, 730, 260));
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 730, 300));
 
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 410, 990, 270));
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 360, 990, 320));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -264,12 +308,14 @@ public class Category extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAdminProductosActionPerformed
 
-    private void btnEditar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditar1ActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditar1ActionPerformed
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnLimpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseClicked
-       
+        textID.setText("");
+        textCategoria.setText("");
+        txtArea.setText("");
     }//GEN-LAST:event_btnLimpiarMouseClicked
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -283,50 +329,19 @@ public class Category extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Category.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Category.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Category.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Category.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Category().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdminProductos;
-    private javax.swing.JButton btnAgregar1;
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnDesconectar;
-    private javax.swing.JButton btnEditar1;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnLimpiar4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -335,9 +350,8 @@ public class Category extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField textCategoria1;
+    private javax.swing.JTextField textCategoria;
     private javax.swing.JTextField textID;
-    private javax.swing.JTextField textStockMinimo;
     private javax.swing.JTextArea txtArea;
     // End of variables declaration//GEN-END:variables
 }

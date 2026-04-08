@@ -187,6 +187,10 @@ public final class Login extends javax.swing.JDialog {
         return txtUsuario;
     }
 
+    public void limpiarCampos(){
+        txtUsuario.setText("");
+        passUser.setText("");
+    }
     private void categoriaRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaRolActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_categoriaRolActionPerformed

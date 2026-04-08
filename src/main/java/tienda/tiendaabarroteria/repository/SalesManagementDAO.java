@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import tienda.tiendaabarroteria.config.ConexionBD;
+import tienda.tiendaabarroteria.domain.Categoria;
 import tienda.tiendaabarroteria.domain.SaleProducto;
 
 public class SalesManagementDAO implements ISalesManagement {
@@ -41,10 +44,32 @@ public class SalesManagementDAO implements ISalesManagement {
 
         return false;
     }
+    
+        @Override
+    public List<Categoria> obtenerCategorias() {
+         List<Categoria> categorias = new ArrayList<>();
+        final String SQL = "SELECT nombre FROM categoria ORDER BY nombre";
+        ResultSet rs;
 
-//    public static void main(String[] args) {
-//        System.out.println("**** PRUEBAS UNITARIAS ****\n");
-//        ISalesManagement salesManagement = new SalesManagementDAO();
+        try (Connection conn = ConexionBD.getInstancia().getConnection(); 
+                PreparedStatement ps = conn.prepareStatement(SQL)) {
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Categoria categoria = new Categoria();
+                categoria.setNombre(rs.getString("nombre"));
+                categorias.add(categoria);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener Categorías: "+ex.getMessage());
+        }
+
+        return categorias;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("**** PRUEBAS UNITARIAS ****\n");
+        ISalesManagement salesManagement = new SalesManagementDAO();
 //
 //        // --- Iniciando prueba de actualización ---
 //        SaleProducto pId = new SaleProducto();
@@ -60,5 +85,12 @@ public class SalesManagementDAO implements ISalesManagement {
 //        }else {
 //        System.out.println("No se pudo realizar la operación. Revisa el ID o la conexión. "+encontrado);
 //    }
-//    }
+
+//        // Obtener categorías
+//        var listarCategoria = salesManagement.obtenerCategorias();
+//        listarCategoria.forEach(System.out::println);
+        
+   }
+
+
 }

@@ -5,18 +5,19 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import tienda.tiendaabarroteria.domain.Categoria;
 import tienda.tiendaabarroteria.domain.Producto;
-import tienda.tiendaabarroteria.repository.ProductoDAO;
 import tienda.tiendaabarroteria.service.ManageProductoService;
 import tienda.tiendaabarroteria.view.ProductManagement;
 
-public class ProductoController {
+public  class ProductoController {
 
-    private final ProductManagement vista;
-    private final ManageProductoService productoService;
-    private final Producto producto;
+    private  ProductManagement vista;
+    private  ManageProductoService productoService;
+    private  Producto producto;
 
     public ProductoController(ProductManagement view) {
         this.vista = view;
@@ -24,8 +25,9 @@ public class ProductoController {
         this.producto = new Producto();
         cargarTabla();
         iniciarEventos();
+        ejecutarObtenerCategorias();
     }
-
+    
     private void iniciarEventos() {
         // Escuchar el botón
         this.vista.getBtnAgregar().addActionListener(e -> ejecutarGuardado());
@@ -64,7 +66,8 @@ public class ProductoController {
                 p.getNombre(),
                 "Q" + p.getPrecio(),
                 p.getStock(),
-                p.getCategoria()
+                p.getCategoria(),
+                p.getStockMinimo()
             });
         }
     }
@@ -77,7 +80,8 @@ public class ProductoController {
                 ? vista.getCategoria().getSelectedItem().toString() : " ";
         String cantidadText = vista.getCantidad().getText().trim();
         String precioText = vista.getPrecio().getText().trim();
-        if (nombre.isEmpty() || categoria.isEmpty() || cantidadText.isEmpty() || precioText.isEmpty()) {
+        String stockMinimoText = vista.getStockMinimo().getText().trim();
+        if (nombre.isEmpty() || categoria.isEmpty() || cantidadText.isEmpty() || precioText.isEmpty() || stockMinimoText.isEmpty()) {
             JOptionPane.showMessageDialog(vista, "Error: Los campos no pueden estar vacíos");
             return;
         }
@@ -85,10 +89,11 @@ public class ProductoController {
         try {
             int stock = Integer.parseInt(vista.getCantidad().getText().trim());
             double precio = Double.parseDouble(vista.getPrecio().getText().trim());
+            int stockMinimo = Integer.parseInt(vista.getStockMinimo().getText().trim());
 
             // Aquí usas los valores
             //  2. Crear el objeto Modelo
-            Producto nuevoProducto = new Producto(nombre, precio, stock, categoria);
+            Producto nuevoProducto = new Producto(nombre, precio, stock, categoria, stockMinimo);
             // 3. Delegar la lógica al Service
             productoService.agregarProductoNuevo(nuevoProducto);
 
@@ -98,7 +103,7 @@ public class ProductoController {
             cargarTabla(); // El método que ya tienes para refrescar la tabla
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(vista, "Precio y Stock deben ser números válidos.");
+            JOptionPane.showMessageDialog(vista, "Precio, Stock y Stock mínimo deben ser números válidos.");
             // Mostrar mensaje de error en la interfaz
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista, ex.getMessage());
@@ -114,17 +119,19 @@ public class ProductoController {
         // Crear objetos con los datos
         this.producto.setId(Integer.parseInt(modelo.getValueAt(filaSeleccionada, 0).toString()));
         this.productoService.buscarProductoID(this.producto);
-        
+
         // Pasar objeto a los métodos
         mostrarDatos(this.producto);
     }
+
     private void mostrarDatos(Producto producto) {
-       this.vista.getNombre().setText(producto.getNombre());
-       this.vista.getPrecio().setText(String.valueOf(producto.getPrecio()));
-       this.vista.getCantidad().setText(String.valueOf(producto.getStock()));
-       this.vista.getCategoria().setSelectedItem(producto.getCategoria());
+        this.vista.getNombre().setText(producto.getNombre());
+        this.vista.getPrecio().setText(String.valueOf(producto.getPrecio()));
+        this.vista.getCantidad().setText(String.valueOf(producto.getStock()));
+        this.vista.getCategoria().setSelectedItem(producto.getCategoria());
+        this.vista.getStockMinimo().setText(String.valueOf(producto.getStockMinimo()));
     }
-    
+
     private void ejecutarModificarDatos() {
         int filaSeleccionada = vista.getjTable1().getSelectedRow();
 
@@ -142,24 +149,29 @@ public class ProductoController {
             this.producto.setPrecio(Double.parseDouble(this.vista.getPrecio().getText().trim()));
             this.producto.setStock(Integer.parseInt(this.vista.getCantidad().getText().trim()));
             this.producto.setCategoria(this.vista.getCategoria().getSelectedItem().toString());
+            this.producto.setStockMinimo(Integer.parseInt(this.vista.getStockMinimo().getText().trim()));
 
             Producto producto1 = new Producto(this.producto.getId(), this.producto.getNombre(),
-                    this.producto.getPrecio(), this.producto.getStock(), this.producto.getCategoria());
-            
+                    this.producto.getPrecio(), this.producto.getStock(), this.producto.getCategoria(),
+                    this.producto.getStockMinimo());
+
+            // 3. Delegar la lógica al Service
             this.productoService.modificarProducto(producto1);
+            // 4. Actualizar la interfaz tras éxito
             vista.limpiarCampos();
             cargarTabla();
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(vista, "Precio y Stock deben ser números válidos.");
             // Mostrar mensaje de error en la interfaz
-        } catch(Exception ex){
-             JOptionPane.showMessageDialog(vista, ex.getMessage());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(vista, ex.getMessage());
 
         }
     }
-    
-    private void ejecutarBtnEliminar(){
-         int filaSeleccionada = vista.getjTable1().getSelectedRow();
+
+    private void ejecutarBtnEliminar() {
+        // Seleccionar fila de la tabla
+        int filaSeleccionada = vista.getjTable1().getSelectedRow();
 
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(vista, "Seleccione un registro.", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
@@ -168,7 +180,7 @@ public class ProductoController {
 
         int confirmacion = JOptionPane.showConfirmDialog(vista, "¿Está seguro de que desea eliminar este registro?",
                 "Confirmar Eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        
+
         if (confirmacion == JOptionPane.YES_OPTION) {
             try {
                 // 1. Obtener el ID del registro (suponiendo que está en la columna 0)
@@ -179,11 +191,23 @@ public class ProductoController {
                 //2. Lógica de persistencia (Llamada al DAO o Servicio)
                 this.productoService.eliminarProductoID(palabraEliminar);
                 cargarTabla();
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(vista, ex.getMessage());
             }
 
         }
     }
 
+    public final void ejecutarObtenerCategorias() {
+        JComboBox combo = this.vista.getCategoria(); // Obtenemos el combo
+        combo.removeAllItems(); // Limpiamos elementos previos
+
+        // Traemos la lista de la base de datos
+        List<Categoria> obtenerCategorias = productoService.obtenerCategorias();
+
+        // Llenamos el combo solo con el nombre (el String)
+        for (Categoria cat : obtenerCategorias) {
+            combo.addItem(cat.getNombre());
+        }
+    }
 }

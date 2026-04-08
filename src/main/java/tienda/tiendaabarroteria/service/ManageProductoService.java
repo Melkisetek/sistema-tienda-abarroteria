@@ -1,13 +1,15 @@
 package tienda.tiendaabarroteria.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import tienda.tiendaabarroteria.domain.Categoria;
 import tienda.tiendaabarroteria.domain.Producto;
 import tienda.tiendaabarroteria.repository.IProductoDAO;
 import tienda.tiendaabarroteria.repository.ProductoDAO;
 
 public class ManageProductoService {
 
-    private IProductoDAO dao = new ProductoDAO();
+    private final IProductoDAO dao = new ProductoDAO();
 
     public List<Producto> obtenerProductosParaTabla() {
         // Aquí podrías filtrar, aplicar descuentos o reglas de negocio
@@ -20,8 +22,11 @@ public class ManageProductoService {
         if (producto.getPrecio() <= 0) {
             throw new Exception("El precio no puede ser menor a cero");
         }
-        if (producto.getStock() < 0) {
+        if (producto.getStock() <= 0) {
             throw new Exception("El stock no puede ser negativo.");
+        }
+        if (producto.getStockMinimo() <= 0) {
+            throw new Exception("El stock mínimo no puede ser menor a cero");
         }
         if (producto.getNombre().matches("\\d+")) {
             throw new Exception("El nombre no puede ser un número.");
@@ -37,8 +42,11 @@ public class ManageProductoService {
         if (producto.getPrecio() <= 0) {
             throw new Exception("El precio no puede ser menor a cero");
         }
-        if (producto.getStock() < 0) {
+        if (producto.getStock() <= 0) {
             throw new Exception("El stock no puede ser negativo.");
+        }
+        if (producto.getStockMinimo() <= 0) {
+            throw new Exception("Stock mínimo no puede ser negativo");
         }
         if (producto.getNombre().matches("\\d+")) {
             throw new Exception("El nombre no puede ser un número.");
@@ -69,5 +77,17 @@ public class ManageProductoService {
         } else {
             throw new Exception("Producto no encontrado");
         }
+    }
+
+    public List<Categoria> obtenerCategorias() {
+
+        // 1. Llamada al DAO
+        List<Categoria> listaEntidad = dao.obtenerCategorias();
+        // 2. Regla: Validar si la lista viene nula
+        if (listaEntidad == null) {
+            return new ArrayList<>();
+        }
+
+        return listaEntidad;
     }
 }

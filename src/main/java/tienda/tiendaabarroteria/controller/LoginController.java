@@ -1,4 +1,3 @@
-
 package tienda.tiendaabarroteria.controller;
 
 import javax.swing.JOptionPane;
@@ -7,7 +6,9 @@ import tienda.tiendaabarroteria.service.LoginService;
 import tienda.tiendaabarroteria.view.Login;
 import tienda.tiendaabarroteria.view.ProductManagement;
 import tienda.tiendaabarroteria.view.SalesManagement;
+
 public class LoginController {
+
     private Login vista;
     private LogIn login;
     private LoginService loginService;
@@ -18,8 +19,8 @@ public class LoginController {
         loginService = new LoginService();
         iniciarEventos();
     }
-    
-    private void iniciarEventos(){
+
+    private void iniciarEventos() {
         this.vista.getBtnEntrar().addActionListener(e -> ejecutarEntrar());
     }
 
@@ -27,20 +28,19 @@ public class LoginController {
         String nombre = this.vista.getTxtUsuario().getText().trim();
         String contrasenia = this.vista.getPassUser().getText().trim();
         if (nombre.isEmpty() || contrasenia.isEmpty()) {
-             JOptionPane.showMessageDialog(vista, "Campo Vácio");
-             return;
+            JOptionPane.showMessageDialog(vista, "Campo Vácio");
+            return;
         }
         try {
-            if(this.vista.getCategoriaRol().getSelectedItem().toString().equals("ADMINISTRADOR") ){
+            if (this.vista.getCategoriaRol().getSelectedItem().toString().equals("ADMINISTRADOR")) {
                 LogIn iniciarSesion = new LogIn(nombre, contrasenia);
                 this.loginService.iniciarSesion(iniciarSesion);
                 // llamar
-                 this.vista.lookAndFeelSystem(); 
-                 ProductManagement gestionarProductos = ProductManagement.getInstance();
-                 gestionarProductos.setVisible(true);
-                 this.vista.dispose(); // Cerramos el login
-            } 
-            else if( this.vista.getCategoriaRol().getSelectedItem().toString().equals("EMPLEADO")){
+                this.vista.lookAndFeelSystem();
+                ProductManagement gestionarProductos = ProductManagement.getInstance();
+                gestionarProductos.setVisible(true);
+                this.vista.dispose(); // Cerramos el login
+            } else if (this.vista.getCategoriaRol().getSelectedItem().toString().equals("EMPLEADO")) {
                 LogIn iniciarEmpleado = new LogIn(nombre, contrasenia);
                 this.loginService.iniciarSesionEmpleado(iniciarEmpleado);
                 // llamar componente
@@ -48,15 +48,14 @@ public class LoginController {
                 SalesManagement puntoDeFacturacion = new SalesManagement();
                 puntoDeFacturacion.setVisible(true);
                 this.vista.dispose();
-            }
-            else{
+            } else {
                 System.out.println("Error no se inicio sesión");
             }
-            
+
         } catch (Exception ex) {
-              JOptionPane.showMessageDialog(vista, ex.getMessage());
+            this.vista.limpiarCampos();
+            JOptionPane.showMessageDialog(this.vista,ex.getMessage(),"Sesión", JOptionPane.WARNING_MESSAGE);
         }
     }
-    
-    
+
 }

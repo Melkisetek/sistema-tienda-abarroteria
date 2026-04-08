@@ -6,9 +6,10 @@ import java.awt.print.PrinterException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import tienda.tiendaabarroteria.domain.Categoria;
 import tienda.tiendaabarroteria.domain.Producto;
 import tienda.tiendaabarroteria.service.SalesManagementService;
 import tienda.tiendaabarroteria.view.SalesManagement;
@@ -24,6 +25,7 @@ public class SalesManagementController {
         this.salesService = new SalesManagementService();
         this.producto = new Producto();
         cargaTabla();
+        ejecutarObtenerCategorias();
         iniciarEventos();
     }
 
@@ -32,6 +34,8 @@ public class SalesManagementController {
     private void iniciarEventos() {
         //añadir
         this.vista.getBtnAnadir().addActionListener(e -> agregarMultipleProducto());
+        // filtrarCategoria
+        this.vista.getCategoria().addActionListener(f -> filtrarCategoria());
         // print
         this.vista.getBtnImprimir().addActionListener(l -> {
             try {
@@ -147,4 +151,36 @@ public class SalesManagementController {
         }
     }
 
+    private void filtrarCategoria() {
+        DefaultTableModel modelo = (DefaultTableModel) this.vista.getJtablaProductos().getModel();
+        modelo.setRowCount(0); // Limpiar tabla
+
+        String obtenerCategoria = (this.vista.getCategoria().getSelectedItem().toString());
+        this.producto.setCategoria(obtenerCategoria);
+        List<Producto> listaProductos = this.salesService.filtrarCategoria(this.producto);
+
+        for (Producto p : listaProductos) {
+            modelo.addRow(new Object[]{
+                p.getId(),
+                p.getNombre(),
+                "Q" + p.getPrecio(),
+                p.getStock(),
+                p.getCategoria()
+            });
+        }
+    }
+
+    // final:  evitar que se sobreescriba un método
+    public final void ejecutarObtenerCategorias() {
+        JComboBox combo = this.vista.getCategoria(); // Obtenemos el combo
+        combo.removeAllItems(); // Limpiamos elementos previos
+
+        // Traemos la lista de la base de datos
+        List<Categoria> obtenerCategorias = salesService.obtenerCategorias();
+
+        // Llenamos el combo solo con el nombre (el String)
+        for (Categoria cat : obtenerCategorias) {
+            combo.addItem(cat.getNombre());
+        }
+    }
 }

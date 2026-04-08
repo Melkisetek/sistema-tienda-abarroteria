@@ -1,7 +1,9 @@
 package tienda.tiendaabarroteria.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import tienda.tiendaabarroteria.domain.Categoria;
 import tienda.tiendaabarroteria.domain.Producto;
 import tienda.tiendaabarroteria.domain.SaleProducto;
 import tienda.tiendaabarroteria.repository.IProductoDAO;
@@ -32,25 +34,25 @@ public class SalesManagementService {
         }
     }
 
-    public Double procesarVenta(int idProducto, int cantidadAVender) throws Exception {   
+    public Double procesarVenta(int idProducto, int cantidadAVender) throws Exception {
         // --- INICIO DE VALIDACIONES DE NEGOCIO ---
         SalesManagementService prodExistente = new SalesManagementService();
-        
+
         Producto productoVenta = new Producto(idProducto);
-       prodExistente.buscarProductoID(productoVenta);
-       
-       // 2. Validar que la cantidad ingresada sea mayor a cero
+        prodExistente.buscarProductoID(productoVenta);
+
+        // 2. Validar que la cantidad ingresada sea mayor a cero
         if (cantidadAVender <= 0) {
             throw new Exception("La cantidad debe ser mayor a 0");
         }
-        if (productoVenta ==null) {
-             throw new Exception("El producto con ID "+idProducto+" no existe");
+        if (productoVenta == null) {
+            throw new Exception("El producto con ID " + idProducto + " no existe");
         }
-        
-        if (productoVenta.getStock()<=0) {
+
+        if (productoVenta.getStock() <= 0) {
             throw new Exception("Producto agotado (Stock en 0)");
         }
-        
+
         if (cantidadAVender > productoVenta.getStock()) {
             throw new Exception("No hay suficiente stock. Disponible");
         }
@@ -70,10 +72,27 @@ public class SalesManagementService {
         } else {
             throw new Exception("ERROR: No se pudo procesar la venta. Verifique el ID o la disponibilidad de stock.");
         }
-
     }
+
+    public List<Producto> filtrarCategoria(Producto producto) {
+        // Aquí podrías filtrar, aplicar descuentos o reglas de negocio
+        return dao.filtrarProducto(producto);
+    }
+
+    public List<Categoria> obtenerCategorias() {
+
+        // 1. Llamada al DAO
+        List<Categoria> listaEntidad = salesDAO.obtenerCategorias();
+        // 2. Regla: Validar si la lista viene nula
+        if (listaEntidad == null) {
+            return new ArrayList<>();
+        }
+
+        return listaEntidad;
+    }
+
 //
-//    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 //        // Simulamos la interacción desde una interfaz (como tus proyectos en Java Swing)
 //        SalesManagementService service = new SalesManagementService();
 //
@@ -82,6 +101,9 @@ public class SalesManagementService {
 //        // Intentamos vender 5 unidades del producto 15
 //         Number resultado = service.procesarVenta(1, 1);
 //          System.out.println(resultado);
-//    }
 
+        SalesManagementService sales = new SalesManagementService();
+        var encontrado = sales.obtenerCategorias();
+        encontrado.forEach(System.out::println);
+    }
 }

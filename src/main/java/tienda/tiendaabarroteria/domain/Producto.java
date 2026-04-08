@@ -22,24 +22,31 @@ public class Producto {
         this.IDproducto = id;
         this. stockMinimo = stockMinimo;
     }
+    
+    // filtrar categoria
+    public Producto(String categoria){
+        this.categoria = categoria;
+    }
 
     // insertar valor
-    public Producto(String nombre, double precio, int stock, String categoria) {
+    public Producto(String nombre, double precio, int stock, String categoria, int stockMinimo) {
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
         this.categoria = categoria;
+        this.stockMinimo = stockMinimo;
     }
     
     
     
     // Listar registro
-    public Producto(int id, String nombre, double precio, int stock, String categoria) {
+    public Producto(int id, String nombre, double precio, int stock, String categoria, int stockMinimo) {
         this.IDproducto = id;
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
         this.categoria = categoria;
+        this.stockMinimo = stockMinimo;
     }
     
 
