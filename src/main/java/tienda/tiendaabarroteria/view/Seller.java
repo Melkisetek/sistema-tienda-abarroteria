@@ -281,7 +281,7 @@ public class Seller extends javax.swing.JFrame {
 
     private void btnDesconectar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDesconectar1MouseClicked
         java.awt.EventQueue.invokeLater(() -> {
-            Login login = new Login(null, false);
+            Login login = new Login();
             login.setVisible(true);
             this.dispose();
         });

@@ -2,6 +2,7 @@ package tienda.tiendaabarroteria.view;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -49,6 +50,10 @@ public class SalesManagement extends javax.swing.JFrame {
     public JTextField getTextNombre() {
         return textNombre;
     }
+
+    public JLabel getTxtTotal() {
+        return txtTotal;
+    }
     
     
 
@@ -82,7 +87,6 @@ public class SalesManagement extends javax.swing.JFrame {
         id = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         textNombre = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         btnRefrescar = new javax.swing.JButton();
         btnAnadir = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -91,9 +95,12 @@ public class SalesManagement extends javax.swing.JFrame {
         categoria = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         btnLimpiar = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtArea = new javax.swing.JTextArea();
         btnImprimir = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        txtTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Punto de Facturación");
@@ -117,7 +124,7 @@ public class SalesManagement extends javax.swing.JFrame {
         });
         jPanel2.add(btnLimpiar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 580, 220, 40));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 220, 660));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 220, 700));
 
         jLabel1.setBackground(new java.awt.Color(0, 128, 128));
         jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 30)); // NOI18N
@@ -150,11 +157,6 @@ public class SalesManagement extends javax.swing.JFrame {
         textNombre.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
         textNombre.setForeground(new java.awt.Color(0, 128, 128));
         jPanel3.add(textNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 230, 40));
-
-        jLabel6.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 128, 128));
-        jLabel6.setText("CANTIDAD");
-        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, -1, -1));
 
         btnRefrescar.setBackground(new java.awt.Color(0, 128, 128));
         btnRefrescar.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
@@ -237,6 +239,11 @@ public class SalesManagement extends javax.swing.JFrame {
         });
         jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, 100, 50));
 
+        jLabel9.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 128, 128));
+        jLabel9.setText("CANTIDAD");
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, -1, -1));
+
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, 1000, 340));
 
         txtArea.setColumns(20);
@@ -262,7 +269,17 @@ public class SalesManagement extends javax.swing.JFrame {
         });
         jPanel1.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 600, 100, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1240, 650));
+        jLabel8.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 128, 128));
+        jLabel8.setText("CANTIDAD");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, -1, -1));
+
+        txtTotal.setBackground(new java.awt.Color(255, 102, 0));
+        txtTotal.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
+        txtTotal.setForeground(new java.awt.Color(255, 102, 0));
+        jPanel1.add(txtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 650, -1, -1));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1240, 680));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -281,7 +298,7 @@ public class SalesManagement extends javax.swing.JFrame {
 
     private void btnLimpiar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiar1MouseClicked
         java.awt.EventQueue.invokeLater(() -> {
-            Login login = new Login(null, false);
+            Login login = new Login();
             login.setVisible(true);
             this.dispose();
         });
@@ -289,10 +306,7 @@ public class SalesManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiar1MouseClicked
 
     private void btnLimpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseClicked
-       id.setText("");
-       textNombre.setText("");
-       textCantidad.setText("");
-       txtArea.setText("");
+      
     }//GEN-LAST:event_btnLimpiarMouseClicked
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -317,8 +331,9 @@ public class SalesManagement extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -328,5 +343,6 @@ public class SalesManagement extends javax.swing.JFrame {
     private javax.swing.JTextField textCantidad;
     private javax.swing.JTextField textNombre;
     private javax.swing.JTextArea txtArea;
+    private javax.swing.JLabel txtTotal;
     // End of variables declaration//GEN-END:variables
 }

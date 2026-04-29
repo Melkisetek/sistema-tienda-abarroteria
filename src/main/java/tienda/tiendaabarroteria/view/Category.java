@@ -71,8 +71,7 @@ public class Category extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnDesconectar = new javax.swing.JButton();
-        btnAdminProductos = new javax.swing.JButton();
-        btnLimpiar4 = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         textID = new javax.swing.JTextField();
@@ -117,27 +116,19 @@ public class Category extends javax.swing.JFrame {
         });
         jPanel2.add(btnDesconectar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 220, 40));
 
-        btnAdminProductos.setBackground(new java.awt.Color(0, 128, 128));
-        btnAdminProductos.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        btnAdminProductos.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdminProductos.setText("ADMIN. PRODUCTOS");
-        btnAdminProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnVolver.setBackground(new java.awt.Color(0, 128, 128));
+        btnVolver.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
+        btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/back.png"))); // NOI18N
+        btnVolver.setText("VOLVER");
+        btnVolver.setHideActionText(true);
+        btnVolver.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnVolver.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAdminProductosMouseClicked(evt);
+                btnVolverMouseClicked(evt);
             }
         });
-        btnAdminProductos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdminProductosActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnAdminProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 220, 40));
-
-        btnLimpiar4.setBackground(new java.awt.Color(0, 128, 128));
-        btnLimpiar4.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        btnLimpiar4.setForeground(new java.awt.Color(255, 255, 255));
-        btnLimpiar4.setText("REPORTES");
-        jPanel2.add(btnLimpiar4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 220, 40));
+        jPanel2.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 220, 60));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 220, 700));
 
@@ -275,7 +266,7 @@ public class Category extends javax.swing.JFrame {
 
     private void btnDesconectarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDesconectarMouseClicked
         java.awt.EventQueue.invokeLater(() -> {
-            Login login = new Login(null, false);
+            Login login = new Login();
             login.setVisible(true);
             this.dispose();
         });
@@ -289,24 +280,6 @@ public class Category extends javax.swing.JFrame {
     private void btnDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDesconectarActionPerformed
-
-    private void btnAdminProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAdminProductosMouseClicked
-         try {
-            // Usar el look and feel del sistema
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-          java.awt.EventQueue.invokeLater(() -> {
-         ProductManagement.getInstance().setVisible(true);
-        this.dispose();
-          });
-    }//GEN-LAST:event_btnAdminProductosMouseClicked
-
-    private void btnAdminProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminProductosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAdminProductosActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
@@ -326,19 +299,25 @@ public class Category extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_textIDActionPerformed
 
+    private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
+        java.awt.EventQueue.invokeLater(() -> {
+            ProductManagement.getInstance().setVisible(true);
+            this.dispose();
+        });
+    }//GEN-LAST:event_btnVolverMouseClicked
+
     /**
      * @param args the command line arguments
      */
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdminProductos;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnDesconectar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnLimpiar;
-    private javax.swing.JButton btnLimpiar4;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

@@ -2,18 +2,22 @@ package tienda.tiendaabarroteria.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import tienda.tiendaabarroteria.domain.Categoria;
+import tienda.tiendaabarroteria.domain.DetalleVenta;
 import tienda.tiendaabarroteria.domain.Producto;
 import tienda.tiendaabarroteria.domain.SaleProducto;
+import tienda.tiendaabarroteria.domain.Venta;
 import tienda.tiendaabarroteria.repository.IProductoDAO;
 import tienda.tiendaabarroteria.repository.ProductoDAO;
+import tienda.tiendaabarroteria.repository.ReportDAO;
 import tienda.tiendaabarroteria.repository.SalesManagementDAO;
 
 public class SalesManagementService {
 
     private final IProductoDAO dao;
     private final SalesManagementDAO salesDAO;
+    public double totalAcumulado = 0;
+    private double subtotal = 0;
 
     public SalesManagementService() {
         // Inyectamos la dependencia del DAO
@@ -66,12 +70,16 @@ public class SalesManagementService {
         boolean exito = salesDAO.ActualizarStockObtenerPrecio(idPro, productoCant);
         if (exito) {
             double precio = idPro.getPrecio();
-            double total = precio * cantidadAVender;
-
-            return total;
+            this.subtotal = precio * cantidadAVender;
+            return this.subtotal;
         } else {
             throw new Exception("ERROR: No se pudo procesar la venta. Verifique el ID o la disponibilidad de stock.");
         }
+    }
+
+    public Double CalcularTotal() {
+
+        return this.totalAcumulado += this.subtotal;
     }
 
     public List<Producto> filtrarCategoria(Producto producto) {
@@ -89,6 +97,13 @@ public class SalesManagementService {
         }
 
         return listaEntidad;
+    }
+
+    public void registrarVentaDetalle(Venta venta) {
+
+        ReportDAO reportDAO = new ReportDAO();
+        reportDAO.registrarVenta(venta);
+        
     }
 
 //

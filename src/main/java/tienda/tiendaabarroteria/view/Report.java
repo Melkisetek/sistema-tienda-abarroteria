@@ -1,22 +1,61 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package tienda.tiendaabarroteria.view;
 
-/**
- *
- * @author melquisedec
- */
-public class Report extends javax.swing.JFrame {
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import tienda.tiendaabarroteria.controller.ReportController;
 
-    /**
-     * Creates new form Report
-     */
+public class Report extends javax.swing.JFrame {
+    
     public Report() {
         initComponents();
         setLocationRelativeTo(this);
+        ReportController controller = new ReportController(this);
+        areaTextoReporte();
     }
+    
+    // Getters
+
+    public JButton getBtnLimpiar() {
+        return btnLimpiar;
+    }
+
+    public JButton getBtnPocoStock() {
+        return btnPocoStock;
+    }
+
+    public JButton getBtnTotalVendido() {
+        return btnTotalVendido;
+    }
+
+    public JButton getBtnVentaDeDia() {
+        return btnVentaDeDia;
+    }
+
+    public JTextArea getTxtArea() {
+        return txtArea;
+    }
+
+    public JLabel getTxtInfo() {
+        return txtInfo;
+    }
+    
+    private void areaTextoReporte(){
+        // Título dinámico del reporte
+        txtInfo.setFont(new Font("Arial", Font.ITALIC, 15));
+        txtInfo.setHorizontalAlignment(SwingConstants.CENTER);
+        // Area de texto para el contenido de reporte
+        txtArea.setEditable(false);
+        txtArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        txtArea.setLineWrap(true); // Ajuste de línea  automático
+        txtArea.setWrapStyleWord(true); // Ajuste de línea por palabra
+        txtArea.setBackground(new Color(250, 255, 250)); // Fondo verde muy  claro
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,17 +71,18 @@ public class Report extends javax.swing.JFrame {
         btnDesconectar1 = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
+        btnVentaDeDia = new javax.swing.JButton();
+        btnTotalVendido = new javax.swing.JButton();
+        btnPocoStock = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        txtInfo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Reportes Básicos de Inventario");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -57,6 +97,11 @@ public class Report extends javax.swing.JFrame {
         btnDesconectar1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnDesconectar1MouseClicked(evt);
+            }
+        });
+        btnDesconectar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesconectar1ActionPerformed(evt);
             }
         });
         jPanel2.add(btnDesconectar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-9, 600, -1, 40));
@@ -79,34 +124,34 @@ public class Report extends javax.swing.JFrame {
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setBackground(new java.awt.Color(0, 128, 128));
-        jButton1.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 0, 0));
-        jButton1.setText("Limpiar Reporte");
-        jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 530, 200, 130));
+        btnLimpiar.setBackground(new java.awt.Color(0, 128, 128));
+        btnLimpiar.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(255, 0, 0));
+        btnLimpiar.setText("Limpiar Reporte");
+        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 530, 200, 130));
 
-        jButton2.setBackground(new java.awt.Color(0, 128, 128));
-        jButton2.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Ventas del Día");
-        jPanel3.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 200, 130));
+        btnVentaDeDia.setBackground(new java.awt.Color(0, 128, 128));
+        btnVentaDeDia.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
+        btnVentaDeDia.setForeground(new java.awt.Color(255, 255, 255));
+        btnVentaDeDia.setText("Ventas del Día");
+        jPanel3.add(btnVentaDeDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 200, 130));
 
-        jButton3.setBackground(new java.awt.Color(0, 128, 128));
-        jButton3.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Total Vendido");
-        jPanel3.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 200, 130));
+        btnTotalVendido.setBackground(new java.awt.Color(0, 128, 128));
+        btnTotalVendido.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
+        btnTotalVendido.setForeground(new java.awt.Color(255, 255, 255));
+        btnTotalVendido.setText("Total Vendido");
+        jPanel3.add(btnTotalVendido, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 200, 130));
 
-        jButton4.setBackground(new java.awt.Color(0, 128, 128));
-        jButton4.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Productos con Poco Stock");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnPocoStock.setBackground(new java.awt.Color(0, 128, 128));
+        btnPocoStock.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
+        btnPocoStock.setForeground(new java.awt.Color(255, 255, 255));
+        btnPocoStock.setText("Productos con Poco Stock");
+        btnPocoStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnPocoStockActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 200, 130));
+        jPanel3.add(btnPocoStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 200, 130));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 230, 690));
 
@@ -116,14 +161,14 @@ public class Report extends javax.swing.JFrame {
         jLabel1.setText("Seleccione un Reporte para Visualizar");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Liberation Sans", 0, 22)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 128, 128));
-        jLabel2.setText("Visor de Reportes");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 70, -1, -1));
+        txtInfo.setFont(new java.awt.Font("Liberation Sans", 0, 22)); // NOI18N
+        txtInfo.setForeground(new java.awt.Color(0, 128, 128));
+        txtInfo.setText("Visor de Reportes");
+        jPanel1.add(txtInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 70, -1, -1));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtArea.setColumns(20);
+        txtArea.setRows(5);
+        jScrollPane1.setViewportView(txtArea);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 110, 650, 570));
 
@@ -143,7 +188,7 @@ public class Report extends javax.swing.JFrame {
 
     private void btnDesconectar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDesconectar1MouseClicked
         java.awt.EventQueue.invokeLater(() -> {
-            Login login = new Login(null, false);
+            Login login = new Login();
             login.setVisible(true);
             this.dispose();
         });
@@ -156,9 +201,13 @@ public class Report extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_btnVolverMouseClicked
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnPocoStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPocoStockActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnPocoStockActionPerformed
+
+    private void btnDesconectar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDesconectar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -197,17 +246,17 @@ public class Report extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDesconectar1;
+    private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnPocoStock;
+    private javax.swing.JButton btnTotalVendido;
+    private javax.swing.JButton btnVentaDeDia;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea txtArea;
+    private javax.swing.JLabel txtInfo;
     // End of variables declaration//GEN-END:variables
 }

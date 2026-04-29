@@ -3,6 +3,7 @@ package tienda.tiendaabarroteria.controller;
 import javax.swing.JOptionPane;
 import tienda.tiendaabarroteria.domain.LogIn;
 import tienda.tiendaabarroteria.service.LoginService;
+import tienda.tiendaabarroteria.service.SesionActual;
 import tienda.tiendaabarroteria.view.Login;
 import tienda.tiendaabarroteria.view.ProductManagement;
 import tienda.tiendaabarroteria.view.SalesManagement;
@@ -35,6 +36,9 @@ public class LoginController {
             if (this.vista.getCategoriaRol().getSelectedItem().toString().equals("ADMINISTRADOR")) {
                 LogIn iniciarSesion = new LogIn(nombre, contrasenia);
                 this.loginService.iniciarSesion(iniciarSesion);
+                // obtener nombre cajero
+                SesionActual.nombreCajero = nombre;
+                 System.out.println("Nombre cajero: "+SesionActual.nombreCajero);
                 // llamar
                 this.vista.lookAndFeelSystem();
                 ProductManagement gestionarProductos = ProductManagement.getInstance();
@@ -43,6 +47,8 @@ public class LoginController {
             } else if (this.vista.getCategoriaRol().getSelectedItem().toString().equals("EMPLEADO")) {
                 LogIn iniciarEmpleado = new LogIn(nombre, contrasenia);
                 this.loginService.iniciarSesionEmpleado(iniciarEmpleado);
+                SesionActual.nombreCajero = nombre;
+                System.out.println("Nombre cajero: "+SesionActual.nombreCajero);
                 // llamar componente
                 this.vista.lookAndFeelSystem();
                 SalesManagement puntoDeFacturacion = new SalesManagement();

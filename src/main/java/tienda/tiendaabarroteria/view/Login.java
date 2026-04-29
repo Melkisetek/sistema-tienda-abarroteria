@@ -5,14 +5,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import tienda.tiendaabarroteria.controller.LoginController;
 
-public final class Login extends javax.swing.JDialog {
+public final class Login extends javax.swing.JFrame {
 
-    //  javax.swing.JFrame
-    public Login(java.awt.Frame parent, boolean modal) {
+    //  javax.swing.JFrame -java.awt.Frame parent, boolean modal
+    public Login() {
         //   super(parent, modal);
         initComponents();
         setLocationRelativeTo(this);

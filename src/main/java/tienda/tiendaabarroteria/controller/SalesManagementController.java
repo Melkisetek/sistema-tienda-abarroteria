@@ -3,15 +3,20 @@ package tienda.tiendaabarroteria.controller;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.print.PrinterException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import tienda.tiendaabarroteria.domain.Categoria;
+import tienda.tiendaabarroteria.domain.DetalleVenta;
 import tienda.tiendaabarroteria.domain.Producto;
+import tienda.tiendaabarroteria.domain.Venta;
 import tienda.tiendaabarroteria.service.SalesManagementService;
+import tienda.tiendaabarroteria.service.SesionActual;
 import tienda.tiendaabarroteria.view.SalesManagement;
 
 public class SalesManagementController {
@@ -19,6 +24,10 @@ public class SalesManagementController {
     private SalesManagement vista;
     private SalesManagementService salesService;
     private Producto producto;
+    private int contador = 0;
+    private double totalAcumulado;
+    // Variable almacenar listaDetalleVenta
+    private List<DetalleVenta> listaTemporal = new ArrayList<>();
 
     public SalesManagementController(SalesManagement vista) {
         this.vista = vista;
@@ -28,8 +37,6 @@ public class SalesManagementController {
         ejecutarObtenerCategorias();
         iniciarEventos();
     }
-
-    private int contador = 0;
 
     private void iniciarEventos() {
         //añadir
@@ -51,7 +58,12 @@ public class SalesManagementController {
         // limpiar
         // Botón para limpiar
         this.vista.getBtnLimpiar().addActionListener(e -> {
+            this.vista.getId().setText("");
+            this.vista.getTextNombre().setText("");
+            this.vista.getTextCantidad().setText("");
             this.vista.getTxtArea().setText("");
+            this.vista.getTxtTotal().setText("");
+            this.salesService.totalAcumulado = 0;
             contador = 0;
         });
 
@@ -108,6 +120,7 @@ public class SalesManagementController {
     }
 
     private void agregarMultipleProducto() {
+        // 1. Obtener datos de los campos de texto
         String cantidadText = this.vista.getTextCantidad().getText().trim();
         String nombreText = this.vista.getTextNombre().getText().trim();
         String idTxt = this.vista.getId().getText().trim();
@@ -127,28 +140,38 @@ public class SalesManagementController {
                 contador++;
                 String detalle = contador + "              " + this.producto.getNombre().trim()
                         + "                          Q" + this.producto.getPrecio() + "                     "
-                        + this.vista.getTextCantidad().getText().trim() + "                   Q"
+                        + cantidadProduct+ "                   Q"
                         + totalVenta + "\n";
 
                 if (contador == 1) {
                     this.vista.getTxtArea().setText("==================DETALLE PRODUCTOS==================\n"
-                            + "NUM        PRODUCTO                     PRECIO          CANTIDAD        TOTAL\n" + detalle);
+                            + "NUM        PRODUCTO                     PRECIO          CANTIDAD        Subtotal\n" + detalle);
 
                 } else {
                     this.vista.getTxtArea().append(detalle);
                 }
-
+                cargaTabla();
+                // Llamar método cálcular total
+                CalcularTotal();
+                //Crear el objeto detalle y guardarlo en la lista
+                DetalleVenta detalleVenta = new DetalleVenta(this.producto.getNombre(), cantidadProduct,this.producto.getPrecio(), totalVenta);
+                this.listaTemporal.add(detalleVenta);
+                registrarVentaDetalle();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this.vista, ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
                 // Logger para ver errores 
                 Logger.getLogger(ProductoController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            cargaTabla();
-
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(vista, "Error: El ID y la Cantidad deben ser números válidos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
+    }
+
+    private void CalcularTotal() {
+        this.totalAcumulado = salesService.CalcularTotal();
+        JLabel totalText = this.vista.getTxtTotal();
+        totalText.setText("Total: Q" + totalAcumulado);
     }
 
     private void filtrarCategoria() {
@@ -183,4 +206,17 @@ public class SalesManagementController {
             combo.addItem(cat.getNombre());
         }
     }
+
+    private void registrarVentaDetalle() {
+        // 1. Creamos la venta principal
+        Venta nuevaVenta = new Venta(this.totalAcumulado, SesionActual.nombreCajero);
+
+        // 2. Simplemente le pasamos la lista que hemos estado llenando
+        nuevaVenta.setDetalles(this.listaTemporal);
+        // 3. Enviamos al servicio 
+        this.salesService.registrarVentaDetalle(nuevaVenta);
+        // Limpiamos todo para el siguiente cliente
+        listaTemporal.clear();
+    }
+
 }

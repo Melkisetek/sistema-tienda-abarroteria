@@ -449,7 +449,7 @@ public class ProductManagement extends javax.swing.JFrame {
 
     private void btnDesconectarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDesconectarMouseClicked
         java.awt.EventQueue.invokeLater(() -> {
-            Login login = new Login(null, false);
+            Login login = new Login();
             login.setVisible(true);
             this.dispose();
         });
