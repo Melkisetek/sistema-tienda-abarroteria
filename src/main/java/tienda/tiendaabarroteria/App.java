@@ -24,7 +24,7 @@ public class App {
 
 // Pruebas
 //        java.awt.EventQueue.invokeLater(() -> {
-//            SalesManagement report= new SalesManagement();
+//            Report report= new Report();
 //            report.setVisible(true);
 //        });
 

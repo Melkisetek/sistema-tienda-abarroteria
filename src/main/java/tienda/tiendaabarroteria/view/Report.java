@@ -9,13 +9,14 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import tienda.tiendaabarroteria.controller.ReportController;
 
-public class Report extends javax.swing.JFrame {
+public final class Report extends javax.swing.JFrame {
     
     public Report() {
         initComponents();
         setLocationRelativeTo(this);
         ReportController controller = new ReportController(this);
         areaTextoReporte();
+        areaFondoRojo();
     }
     
     // Getters
@@ -44,7 +45,7 @@ public class Report extends javax.swing.JFrame {
         return txtInfo;
     }
     
-    private void areaTextoReporte(){
+    public void areaTextoReporte(){
         // Título dinámico del reporte
         txtInfo.setFont(new Font("Arial", Font.ITALIC, 15));
         txtInfo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -54,6 +55,10 @@ public class Report extends javax.swing.JFrame {
         txtArea.setLineWrap(true); // Ajuste de línea  automático
         txtArea.setWrapStyleWord(true); // Ajuste de línea por palabra
         txtArea.setBackground(new Color(250, 255, 250)); // Fondo verde muy  claro
+    }
+    
+    public void areaFondoRojo(){
+        txtArea.setBackground(new Color(255, 250, 250)); // Fondo rojo muy claro
     }
     
 
@@ -140,6 +145,11 @@ public class Report extends javax.swing.JFrame {
         btnTotalVendido.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
         btnTotalVendido.setForeground(new java.awt.Color(255, 255, 255));
         btnTotalVendido.setText("Total Vendido");
+        btnTotalVendido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTotalVendidoActionPerformed(evt);
+            }
+        });
         jPanel3.add(btnTotalVendido, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 200, 130));
 
         btnPocoStock.setBackground(new java.awt.Color(0, 128, 128));
@@ -208,6 +218,10 @@ public class Report extends javax.swing.JFrame {
     private void btnDesconectar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectar1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDesconectar1ActionPerformed
+
+    private void btnTotalVendidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTotalVendidoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTotalVendidoActionPerformed
 
     /**
      * @param args the command line arguments
