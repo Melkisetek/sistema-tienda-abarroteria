@@ -13,11 +13,11 @@ import tienda.tiendaabarroteria.domain.Producto;
 import tienda.tiendaabarroteria.service.ManageProductoService;
 import tienda.tiendaabarroteria.view.ProductManagement;
 
-public  class ProductoController {
+public class ProductoController {
 
-    private  ProductManagement vista;
-    private  ManageProductoService productoService;
-    private  Producto producto;
+    private ProductManagement vista;
+    private ManageProductoService productoService;
+    private Producto producto;
 
     public ProductoController(ProductManagement view) {
         this.vista = view;
@@ -27,17 +27,18 @@ public  class ProductoController {
         iniciarEventos();
         ejecutarObtenerCategorias();
     }
-    
+
     private void iniciarEventos() {
         // Escuchar el botón
         this.vista.getBtnAgregar().addActionListener(e -> ejecutarGuardado());
         this.vista.getBtnEditar().addActionListener(e -> ejecutarModificarDatos());
         this.vista.getBtnEliminar().addActionListener(e -> ejecutarBtnEliminar());
+        this.vista.getBtnLimpiar().addActionListener(l -> limpiarFormulario());
         // Presionar Enter
         this.vista.getPrecio().addActionListener(e -> ejecutarGuardado());
         this.vista.getCantidad().addActionListener(e -> ejecutarGuardado());
         this.vista.getNombre().addActionListener(e -> ejecutarGuardado());
-        
+
         this.vista.getjTable1().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -73,20 +74,32 @@ public  class ProductoController {
     }
 
     private void ejecutarGuardado() {
-
-        // 1. Extraer datos de la vista y parsear
-        String nombre = vista.getNombre().getText().trim();
-        String categoria = (vista.getCategoria().getSelectedItem() != null)
-                ? vista.getCategoria().getSelectedItem().toString() : " ";
-        String cantidadText = vista.getCantidad().getText().trim();
-        String precioText = vista.getPrecio().getText().trim();
-        String stockMinimoText = vista.getStockMinimo().getText().trim();
-        if (nombre.isEmpty() || categoria.isEmpty() || cantidadText.isEmpty() || precioText.isEmpty() || stockMinimoText.isEmpty()) {
-            JOptionPane.showMessageDialog(vista, "Error: Los campos no pueden estar vacíos");
+        if (this.vista.getNombre().getText().equals("")) {
+            this.vista.getNombre().requestFocusInWindow();
+            mostrarMensaje("Proporcione un nombre.");
+            return;
+        }
+        if (this.vista.getCantidad().getText().equals("")) {
+            this.vista.getCantidad().requestFocusInWindow();
+            mostrarMensaje("Proporcione cantidad disponible.");
+            return;
+        }
+        if (this.vista.getPrecio().getText().equals("")) {
+            this.vista.getPrecio().requestFocusInWindow();
+            mostrarMensaje("Proporcione el precio.");
+            return;
+        }
+        if (this.vista.getStockMinimo().getText().equals("")) {
+            this.vista.getStockMinimo().requestFocusInWindow();
+            mostrarMensaje("Proporcione cantidad mínimo.");
             return;
         }
 
         try {
+            // 1. Extraer datos de la vista y parsear
+            String nombre = vista.getNombre().getText().trim();
+            String categoria = (vista.getCategoria().getSelectedItem() != null)
+                    ? vista.getCategoria().getSelectedItem().toString() : " ";
             int stock = Integer.parseInt(vista.getCantidad().getText().trim());
             double precio = Double.parseDouble(vista.getPrecio().getText().trim());
             int stockMinimo = Integer.parseInt(vista.getStockMinimo().getText().trim());
@@ -210,4 +223,20 @@ public  class ProductoController {
             combo.addItem(cat.getNombre());
         }
     }
+
+    private void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this.vista ,mensaje,"Atención",JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void limpiarFormulario() {
+        this.vista.getNombre().setText("");
+        this.vista.getCantidad().setText("");
+        this.vista.getPrecio().setText("");
+        this.vista.getStockMinimo().setText("");
+        // Limpiamos el id seleccionado
+        this.producto.setId(null);
+        // Deseleccionar el registro en la tabla
+        this.vista.getjTable1().getSelectionModel().clearSelection();
+    }
+
 }

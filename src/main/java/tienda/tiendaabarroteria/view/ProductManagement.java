@@ -360,7 +360,12 @@ public class ProductManagement extends javax.swing.JFrame {
 
         // Altura de filas
         jTable1.setRowHeight(30);
-
+        
+        // Asegurar que las columnas se ajusten bien
+        this.jTable1.getColumnModel().getColumn(0).setPreferredWidth(25);
+        this.jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
+        this.jTable1.getColumnModel().getColumn(2).setPreferredWidth(25);
+        this.jTable1.getColumnModel().getColumn(3).setPreferredWidth(25);
     }
 
     // Getters 
@@ -421,10 +426,7 @@ public class ProductManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnLimpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseClicked
-        nombre.setText("");
-        cantidad.setText("");
-        precio.setText("");
-        stockMinimo.setText("");
+
     }//GEN-LAST:event_btnLimpiarMouseClicked
 
     private void categoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaActionPerformed
