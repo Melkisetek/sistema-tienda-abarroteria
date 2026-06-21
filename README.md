@@ -55,6 +55,12 @@ Antes de iniciar la aplicación, es obligatorio configurar la base de datos. El 
    private  final String PASSWORD = "tu_password";
    ```
 
+4. **Iniciar sesión al sistema:**
+   
+   - Usuario: Admin
+   
+   - Clave: admin
+
 ## 🔧Instalación y Ejecución
 
 #### 1. Clonar el repositorio
