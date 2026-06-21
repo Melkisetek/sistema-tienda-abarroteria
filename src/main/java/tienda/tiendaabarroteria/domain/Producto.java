@@ -3,7 +3,8 @@ package tienda.tiendaabarroteria.domain;
 import java.util.Objects;
 
 public class Producto {
-    private  int IDproducto;
+   // private  int IDproducto;
+      private  Integer IDproducto;
     private String nombre;
     private double precio;
     private  int stock;
@@ -18,7 +19,7 @@ public class Producto {
     }
     
     // stock minimo
-    public Producto(int id, int stockMinimo){
+    public Producto(Integer id, int stockMinimo){
         this.IDproducto = id;
         this. stockMinimo = stockMinimo;
     }
@@ -40,7 +41,7 @@ public class Producto {
     
     
     // Listar registro
-    public Producto(int id, String nombre, double precio, int stock, String categoria, int stockMinimo) {
+    public Producto(Integer id, String nombre, double precio, int stock, String categoria, int stockMinimo) {
         this.IDproducto = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -54,7 +55,7 @@ public class Producto {
         return IDproducto;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.IDproducto = id;
     }
 
