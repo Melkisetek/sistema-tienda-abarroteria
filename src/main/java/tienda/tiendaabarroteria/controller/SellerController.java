@@ -1,7 +1,5 @@
 package tienda.tiendaabarroteria.controller;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,29 +11,42 @@ import tienda.tiendaabarroteria.view.Seller;
 
 public class SellerController {
 
-    private SellerService sellerService;
-    private Seller vista;
-    private Persona persona;
+    private final SellerService sellerService;
+    private final Seller vista;
+    private Integer idSeleccionado = null;
 
     public SellerController(Seller vista) {
         this.vista = vista;
         this.sellerService = new SellerService();
-        this.persona = new Persona();
         iniciarEventos();
         cargarTabla();
     }
 
     private void iniciarEventos() {
-        this.vista.getBtnAgregar().addActionListener(a -> ejecutarGuardado());
-        this.vista.getBtnEditar().addActionListener(e -> ejecutarModificado());
-        this.vista.getBtnEliminar().addActionListener(e -> ejecutarEliminado());
-        // Seleccionar valores en tabla
-        this.vista.getjTable().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cargarDatoEnFormulario();
-            }
+        // 1. Escuchar los botones principales
+        this.vista.getBtnAgregar().addActionListener(a -> this.ejecutarGuardadoOActualizar());
+        this.vista.getBtnEliminar().addActionListener(e -> this.ejecutarEliminado());
+        this.vista.getBtnLimpiar().addActionListener(l -> this.limpiarCampo());
+        
+        // Presionar enter
+        this.vista.getNombre().addActionListener(e -> ejecutarGuardadoOActualizar());
+        this.vista.getContrasenia().addActionListener(e -> ejecutarGuardadoOActualizar());
 
+        // 2. Escuchar la selección en la JTable para cargar el registro automáticamente
+        this.vista.getjTable().getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting() && this.vista.getjTable().getSelectedRow() != -1) {
+                int filaSeleccionada = this.vista.getjTable().getSelectedRow();
+                try {
+                    Object idObj = this.vista.getjTable().getValueAt(filaSeleccionada, 0);
+                    if (idObj != null) {
+                        Integer id = Integer.valueOf(idObj.toString());
+                        seleccionarProductoParaEditar(id);
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(ProductoController.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(vista, "Error al seleccionar el registro: " + ex.getMessage());
+                }
+            }
         });
     }
 
@@ -55,23 +66,47 @@ public class SellerController {
         }
     }
 
-    private void ejecutarGuardado() {
-        // 1. Obtener datos de la vista
-        String usuarioTxt = this.vista.getNombre().getText().trim();
-        String contraseniaTxt = this.vista.getContrasenia().getText().trim();
-        String genero = this.vista.getSexo().getSelectedItem().toString();
-        if (usuarioTxt.isEmpty() || contraseniaTxt.isEmpty() || genero.isEmpty()) {
-            JOptionPane.showMessageDialog(vista, "Nombre y Contraseña no pueden estar vacíos", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    private void ejecutarGuardadoOActualizar() {
+        // 1. Validaciones básicas de la UI
+        if (this.vista.getNombre().getText().trim().isEmpty()) {
+            this.vista.getNombre().requestFocusInWindow();
+            this.mostrarMensaje("Proporcione nombre.");
+            return;
+        }
+
+        if (this.vista.getContrasenia().getText().trim().isEmpty()) {
+            this.vista.getContrasenia().requestFocusInWindow();
+            this.mostrarMensaje("Proporcione contraseña.");
+            return;
+        }
+
+        if (this.vista.getSexo().getSelectedItem().equals("")) {
+            this.mostrarMensaje("Género incorrecto");
             return;
         }
 
         try {
-            // 2. Crear el objeto categoria
-            Persona nuevoCategoria = new Persona(usuarioTxt, contraseniaTxt, genero);
-            // 3. Delegar la lógica al servicio
-            this.sellerService.agregarEmpleado(nuevoCategoria);
-            // 4. Actualizar la interfaz tras éxito
-            this.vista.limpiarCampo();
+            String nombre = this.vista.getNombre().getText().trim();
+            String contrasenia = this.vista.getContrasenia().getText().trim();
+            String genero = this.vista.getSexo().getSelectedItem().toString();
+
+            if (this.idSeleccionado == null) {
+                // -- NUEVO REGISTRO (INSERT) --
+                // 2. Crear objeto Persona
+                Persona nuevoCategoria = new Persona(nombre, contrasenia, genero);
+                // 3. Delegar la lógica al servicio
+                this.sellerService.agregarEmpleado(nuevoCategoria);
+            } else {
+                // -- ACTUALIZACIÓN (UPDATE)
+                Persona modificarEmpleado = new Persona(this.idSeleccionado, nombre, contrasenia, genero);
+
+                // 4. Delegar la lógica al Service
+                this.sellerService.modificarEmpleado(modificarEmpleado);
+
+            }
+
+            // 5. Actualizar la interfaz tras éxito
+            this.limpiarCampo();
             cargarTabla();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista, ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -80,66 +115,27 @@ public class SellerController {
         }
     }
 
-    private void cargarDatoEnFormulario() {
-        // 1. Obtener datos de la tabla
-        int filaSeleccionada = this.vista.getjTable().getSelectedRow();
-        DefaultTableModel modelo = (DefaultTableModel) this.vista.getjTable().getModel();
-
-        if (filaSeleccionada != -1) {
-            try {
-                // 2. Crear objetos con los datos
-                this.persona.setId(Integer.parseInt(modelo.getValueAt(filaSeleccionada, 0).toString()));
-                this.sellerService.buscarCategoriaId(this.persona);
-
-                // 3. Pasar objeto al método
-                mostrarDatos(this.persona);
-            } catch (Exception ex) {
-                Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-
-    }
-
-    private void mostrarDatos(Persona persona) {
-        this.vista.getNombre().setText(persona.getUsuario());
-        this.vista.getContrasenia().setText(persona.getContrasenia());
-
-        if ("MASCULINO".equals(this.vista.getSexo().getSelectedItem()) || "FEMENINO".equals(this.vista.getSexo().getSelectedItem())) {
-            this.vista.getSexo().setSelectedItem(persona.getGenero());
-        } else {
-            System.out.println("Error en mostrar genero: " + persona);
-        }
-    }
-
-    private void ejecutarModificado() {
-        // 1. Obtener datos de la tabla
-        int filaSeleccionada = vista.getjTable().getSelectedRow();
-        DefaultTableModel modelo = (DefaultTableModel) vista.getjTable().getModel();
-
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(vista, "Seleccione un registro.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    private void seleccionarProductoParaEditar(Integer id) {
         try {
-            // 2. Crear objetos con los datos
-            this.persona.setId(Integer.parseInt(modelo.getValueAt(filaSeleccionada, 0).toString()));
-            this.persona.setUsuario(this.vista.getNombre().getText().trim());
-            this.persona.setContrasenia(this.vista.getContrasenia().getText().trim());
-            this.persona.setGenero(this.vista.getSexo().getSelectedItem().toString());
+            Persona personaSeleccionar = new Persona();
+            personaSeleccionar.setId(id);
 
-            Persona modificarEmpleado = new Persona(this.persona.getId(), this.persona.getUsuario(),
-                    this.persona.getContrasenia(), this.persona.getGenero());
+            // Consulta fresca a la base de datos a través del Service
+            this.sellerService.buscarCategoriaId(personaSeleccionar);
 
-            // 3. Delegar la lógica al Service
-            this.sellerService.modificarEmpleado(modificarEmpleado);
-            // 4. Actualizar la interfaz tras éxito
-            this.vista.limpiarCampo();
-            cargarTabla();
+            // Cargar datos obtenidos en los JTextField de la vista
+            this.vista.getNombre().setText(personaSeleccionar.getUsuario());
+            this.vista.getContrasenia().setText(personaSeleccionar.getContrasenia());
+            this.vista.getSexo().setSelectedItem(personaSeleccionar.getGenero());
+
+            // Guardar el ID en la variable de control del controlador
+            this.idSeleccionado = id;
+
+            // Cambiar el texto del botón visualmente a "Actualizar"
+            this.vista.getBtnAgregar().setText("Actualizar");
+
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this.vista, ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
-            // Logger para ver errores 
-            Logger.getLogger(ProductoController.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(vista, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -164,11 +160,23 @@ public class SellerController {
 
                 //2. Lógica de persistencia (Llamada al DAO o Servicio)
                 this.sellerService.eliminarEmpleado(eliminarEmpleado);
-                this.vista.limpiarCampo();
+                this.limpiarCampo();
                 cargarTabla();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(vista, ex.getMessage());
             }
         }
+    }
+
+    private void limpiarCampo() {
+        this.vista.getNombre().setText("");
+        this.vista.getContrasenia().setText("");
+        this.idSeleccionado = null;
+        this.vista.getBtnAgregar().setText("Guardar");
+        this.vista.getjTable().getSelectionModel().clearSelection();
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this.vista, mensaje, "Atención", JOptionPane.WARNING_MESSAGE);
     }
 }

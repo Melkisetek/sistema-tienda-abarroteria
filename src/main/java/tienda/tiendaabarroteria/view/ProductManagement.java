@@ -14,31 +14,16 @@ public class ProductManagement extends javax.swing.JFrame {
 
     // *** singleton implementar *** 
     // 1. La instancia única y estática
-    private static ProductManagement instance;
-
-    // A. Agrega este atributo
-    private final ProductoController controlador;
-
+    // private static ProductManagement instance;
     // 2. El constructor ahora es PRIVADO (nadie puede hacer 'new' desde fuera)
-    private ProductManagement() {
+    ProductoController productoController;
+
+    public ProductManagement() {
         initComponents();
         setLocationRelativeTo(this);
-        // B. Guarda la instancia aquí
-        this.controlador = new ProductoController(this);
-        miTabla();
-    }
+        this.productoController = new ProductoController(this);
+        diseñoTabla();
 
-    // 3. Método para obtener la instancia única
-    public static ProductManagement getInstance() {
-        if (instance == null) {
-            instance = new ProductManagement();
-        }
-        return instance;
-    }
-
-    // C. Crea un Getter para que Category pueda obtenerlo
-    public ProductoController getControlador() {
-        return this.controlador;
     }
 
     @SuppressWarnings("unchecked")
@@ -63,8 +48,7 @@ public class ProductManagement extends javax.swing.JFrame {
         cantidad = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         btnLimpiar = new javax.swing.JButton();
-        btnAgregar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -226,35 +210,24 @@ public class ProductManagement extends javax.swing.JFrame {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        jPanel4.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 190, 140, 50));
+        jPanel4.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 190, 140, 50));
 
-        btnAgregar.setBackground(new java.awt.Color(0, 128, 128));
-        btnAgregar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
-        btnAgregar.setText("AGREGAR");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setBackground(new java.awt.Color(0, 128, 128));
+        btnGuardar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
-        jPanel4.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 140, 50));
-
-        btnEditar.setBackground(new java.awt.Color(0, 128, 128));
-        btnEditar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        btnEditar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditar.setText("EDITAR");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
-        jPanel4.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, 140, 50));
+        jPanel4.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 140, 50));
 
         btnEliminar.setBackground(new java.awt.Color(0, 128, 128));
         btnEliminar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("ELIMINAR");
-        jPanel4.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 190, 140, 50));
+        jPanel4.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 190, 140, 50));
 
         jLabel6.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 128, 128));
@@ -333,7 +306,7 @@ public class ProductManagement extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void miTabla() {
+    private void diseñoTabla() {
         // Fondo blanco para las celdas
         jTable1.setBackground(Color.WHITE);
         jTable1.setForeground(Color.BLACK);
@@ -360,7 +333,7 @@ public class ProductManagement extends javax.swing.JFrame {
 
         // Altura de filas
         jTable1.setRowHeight(30);
-        
+
         // Asegurar que las columnas se ajusten bien
         this.jTable1.getColumnModel().getColumn(0).setPreferredWidth(25);
         this.jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
@@ -369,12 +342,8 @@ public class ProductManagement extends javax.swing.JFrame {
     }
 
     // Getters 
-    public JButton getBtnAgregar() {
-        return btnAgregar;
-    }
-
-    public JButton getBtnEditar() {
-        return btnEditar;
+    public JButton getBtnGuardar() {
+        return btnGuardar;
     }
 
     public JButton getBtnEliminar() {
@@ -409,17 +378,10 @@ public class ProductManagement extends javax.swing.JFrame {
         return stockMinimo;
     }
 
-    // limpiar campos
-    public void limpiarCampos() {
-        nombre.setText("");
-        cantidad.setText("");
-        precio.setText("");
-        stockMinimo.setText("");
-    }
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditarActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
@@ -491,22 +453,17 @@ public class ProductManagement extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_btnReportesMouseClicked
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAgregarActionPerformed
-
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCategoria;
     private javax.swing.JButton btnDesconectar;
-    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEmpleados;
     private javax.swing.JButton btnGestionarVentas;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnReportes;
     private javax.swing.JTextField cantidad;

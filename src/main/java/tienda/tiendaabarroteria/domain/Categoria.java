@@ -1,18 +1,18 @@
 package tienda.tiendaabarroteria.domain;
 
 public class Categoria {
-    private int idCategoria;
+    private Long idCategoria;
     private String nombreCategoria;
     private String descripcion;
 
     public Categoria() {
     }
     
-      public Categoria(int idCategoria) {
+      public Categoria(Long idCategoria) {
           this.idCategoria = idCategoria;
       }
       
-    public Categoria(int idCatergoria, String nombre, String descripcion) {
+    public Categoria(Long idCatergoria, String nombre, String descripcion) {
         this.idCategoria = idCatergoria;
         this.nombreCategoria = nombre;
         this.descripcion = descripcion;
@@ -23,11 +23,11 @@ public class Categoria {
         this.descripcion = descripcion;
     }
 
-    public int getIdCatergoria() {
+    public Long getIdCatergoria() {
         return idCategoria;
     }
 
-    public void setIdCatergoria(int idCatergoria) {
+    public void setIdCatergoria(Long idCatergoria) {
         this.idCategoria = idCatergoria;
     }
 

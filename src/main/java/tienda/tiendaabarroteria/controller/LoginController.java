@@ -11,12 +11,10 @@ import tienda.tiendaabarroteria.view.SalesManagement;
 public class LoginController {
 
     private Login vista;
-    private LogIn login;
     private LoginService loginService;
 
     public LoginController(Login vista) {
         this.vista = vista;
-        this.login = new LogIn();
         loginService = new LoginService();
         iniciarEventos();
     }
@@ -27,40 +25,43 @@ public class LoginController {
 
     private void ejecutarEntrar() {
         String nombre = this.vista.getTxtUsuario().getText().trim();
-        String contrasenia = this.vista.getPassUser().getText().trim();
+        String contrasenia = new String(this.vista.getPassUser().getPassword());
         if (nombre.isEmpty() || contrasenia.isEmpty()) {
             JOptionPane.showMessageDialog(vista, "Campo Vácio");
             return;
         }
         try {
-            if (this.vista.getCategoriaRol().getSelectedItem().toString().equals("ADMINISTRADOR")) {
-                LogIn iniciarSesion = new LogIn(nombre, contrasenia);
-                this.loginService.iniciarSesion(iniciarSesion);
-                // obtener nombre cajero
-                SesionActual.nombreCajero = nombre;
-                 System.out.println("Nombre cajero: "+SesionActual.nombreCajero);
-                // llamar
-                this.vista.lookAndFeelSystem();
-                ProductManagement gestionarProductos = ProductManagement.getInstance();
-                gestionarProductos.setVisible(true);
-                this.vista.dispose(); // Cerramos el login
-            } else if (this.vista.getCategoriaRol().getSelectedItem().toString().equals("EMPLEADO")) {
-                LogIn iniciarEmpleado = new LogIn(nombre, contrasenia);
-                this.loginService.iniciarSesionEmpleado(iniciarEmpleado);
-                SesionActual.nombreCajero = nombre;
-                System.out.println("Nombre cajero: "+SesionActual.nombreCajero);
-                // llamar componente
-                this.vista.lookAndFeelSystem();
-                SalesManagement puntoDeFacturacion = new SalesManagement();
-                puntoDeFacturacion.setVisible(true);
-                this.vista.dispose();
-            } else {
-                System.out.println("Error no se inicio sesión");
+            switch (this.vista.getCategoriaRol().getSelectedItem().toString()) {
+                case "ADMINISTRADOR" -> {
+                    LogIn iniciarSesion = new LogIn(nombre, contrasenia);
+                    this.loginService.iniciarSesion(iniciarSesion);
+                    // obtener nombre cajero
+                    SesionActual.nombreCajero = nombre;
+                    System.out.println("Nombre cajero: " + SesionActual.nombreCajero);
+                    // llamar
+                    this.vista.lookAndFeelSystem();
+                    ProductManagement gestionarProducto = new ProductManagement();
+                    gestionarProducto.setVisible(true);
+                    this.vista.dispose(); // Cerramos el login
+                }
+                case "EMPLEADO" -> {
+                    LogIn iniciarEmpleado = new LogIn(nombre, contrasenia);
+                    this.loginService.iniciarSesionEmpleado(iniciarEmpleado);
+                    SesionActual.nombreCajero = nombre;
+                    System.out.println("Nombre cajero: " + SesionActual.nombreCajero);
+                    // llamar componente
+                    this.vista.lookAndFeelSystem();
+                    SalesManagement puntoDeFacturacion = new SalesManagement();
+                    puntoDeFacturacion.setVisible(true);
+                    this.vista.dispose();
+                }
+                default ->
+                    System.out.println("Error no se inicio sesión");
             }
 
         } catch (Exception ex) {
             this.vista.limpiarCampos();
-            JOptionPane.showMessageDialog(this.vista,ex.getMessage(),"Sesión", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this.vista, ex.getMessage(), "Sesión", JOptionPane.WARNING_MESSAGE);
         }
     }
 

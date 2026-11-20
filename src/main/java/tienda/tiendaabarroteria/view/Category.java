@@ -1,36 +1,28 @@
 package tienda.tiendaabarroteria.view;
 
+import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import tienda.tiendaabarroteria.controller.CategoryController;
-import tienda.tiendaabarroteria.controller.ProductoController;
-import tienda.tiendaabarroteria.controller.SalesManagementController;
 
 public class Category extends javax.swing.JFrame {
-    
 
     public Category() {
         initComponents();
         setLocationRelativeTo(this);
-        // D. NO USES 'new ProductoController'. Usa el que ya existe:
-          ProductoController controlExistente = ProductManagement.getInstance().getControlador();
-          // E. Pásalo al CategoryController
-        CategoryController categoryController = new CategoryController(this, controlExistente);
+        CategoryController categoryController = new CategoryController(this);
+          this.diseñoTabla();
     }
-    
-        //Getters
 
+    //Getters
     public JButton getBtnAgregar() {
         return btnAgregar;
     }
 
-    public JButton getBtnEditar() {
-        return btnEditar;
-    }
-
+ 
     public JButton getBtnEliminar() {
         return btnEliminar;
     }
@@ -38,8 +30,7 @@ public class Category extends javax.swing.JFrame {
     public JButton getBtnLimpiar() {
         return btnLimpiar;
     }
-    
-    
+
     public JTable getTable() {
 
         return jTable1;
@@ -52,16 +43,31 @@ public class Category extends javax.swing.JFrame {
     public JTextField getTextID() {
         return textID;
     }
-    
-    public JTextArea getTxtArea() {    
+
+    public JTextArea getTxtArea() {
         return txtArea;
     }
-    
-    public void limpiarCampo(){
-        textID.setText("");
-        textCategoria.setText("");
-        txtArea.setText("");
-    }
+  private void diseñoTabla() {
+          // Fondo blanco para las celdas
+        jTable1.setBackground(Color.WHITE);
+        jTable1.setForeground(Color.BLACK);
+
+        // Configurar encabezado
+        jTable1.getTableHeader().setBackground(Color.WHITE);
+        jTable1.getTableHeader().setForeground(Color.BLACK);
+        jTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        
+        // Remover líneas de grid (opcional, para look más limpio)
+        jTable1.setShowGrid(true);
+        jTable1.setGridColor(new Color(230, 230, 230)); // Grid suave
+        
+         // Asegurar que las columnas se ajusten bien
+        this.jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
+        this.jTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
+        this.jTable1.getColumnModel().getColumn(2).setPreferredWidth(350);
+        
+  }
+
 
     @SuppressWarnings(value = "unchecked")
 
@@ -78,7 +84,6 @@ public class Category extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtArea = new javax.swing.JTextArea();
         btnEliminar = new javax.swing.JButton();
@@ -164,19 +169,13 @@ public class Category extends javax.swing.JFrame {
         btnAgregar.setBackground(new java.awt.Color(0, 128, 128));
         btnAgregar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
-        btnAgregar.setText("AGREGAR");
-        jPanel3.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 140, 50));
-
-        btnEditar.setBackground(new java.awt.Color(0, 128, 128));
-        btnEditar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        btnEditar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditar.setText("EDITAR");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregar.setText("Guardar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
+                btnAgregarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, 140, 50));
+        jPanel3.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 140, 50));
 
         txtArea.setColumns(20);
         txtArea.setRows(5);
@@ -188,7 +187,7 @@ public class Category extends javax.swing.JFrame {
         btnEliminar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("ELIMINAR");
-        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 220, 140, 50));
+        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 220, 140, 50));
 
         btnLimpiar.setBackground(new java.awt.Color(0, 128, 128));
         btnLimpiar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
@@ -204,7 +203,7 @@ public class Category extends javax.swing.JFrame {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 220, 140, 50));
+        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 220, 140, 50));
 
         textCategoria.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
         textCategoria.setForeground(new java.awt.Color(0, 128, 128));
@@ -281,14 +280,8 @@ public class Category extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDesconectarActionPerformed
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditarActionPerformed
-
     private void btnLimpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseClicked
-        textID.setText("");
-        textCategoria.setText("");
-        txtArea.setText("");
+
     }//GEN-LAST:event_btnLimpiarMouseClicked
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -300,21 +293,25 @@ public class Category extends javax.swing.JFrame {
     }//GEN-LAST:event_textIDActionPerformed
 
     private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
+
         java.awt.EventQueue.invokeLater(() -> {
-            ProductManagement.getInstance().setVisible(true);
+            ProductManagement productManagement = new ProductManagement();
+            productManagement.setVisible(true);
             this.dispose();
         });
     }//GEN-LAST:event_btnVolverMouseClicked
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnDesconectar;
-    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnVolver;
@@ -333,4 +330,5 @@ public class Category extends javax.swing.JFrame {
     private javax.swing.JTextField textID;
     private javax.swing.JTextArea txtArea;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -3,29 +3,31 @@ package tienda.tiendaabarroteria.domain;
 import java.util.Objects;
 
 public class Producto {
-   // private  int IDproducto;
-      private  Integer IDproducto;
+    // private  int IDproducto;
+
+    private Integer IDproducto;
     private String nombre;
     private double precio;
-    private  int stock;
+    private int stock;
     private String categoria;
     private int stockMinimo;
-    
-    public Producto(){}
-    
+
+    public Producto() {
+    }
+
     // capturar IDproducto
-    public Producto(int id) {
+    public Producto(Integer id) {
         this.IDproducto = id;
     }
-    
+
     // stock minimo
-    public Producto(Integer id, int stockMinimo){
+    public Producto(Integer id, int stockMinimo) {
         this.IDproducto = id;
-        this. stockMinimo = stockMinimo;
+        this.stockMinimo = stockMinimo;
     }
-    
+
     // filtrar categoria
-    public Producto(String categoria){
+    public Producto(String categoria) {
         this.categoria = categoria;
     }
 
@@ -37,9 +39,7 @@ public class Producto {
         this.categoria = categoria;
         this.stockMinimo = stockMinimo;
     }
-    
-    
-    
+
     // Listar registro
     public Producto(Integer id, String nombre, double precio, int stock, String categoria, int stockMinimo) {
         this.IDproducto = id;
@@ -49,9 +49,8 @@ public class Producto {
         this.categoria = categoria;
         this.stockMinimo = stockMinimo;
     }
-    
 
-    public int getId() {
+    public Integer getId() {
         return IDproducto;
     }
 
@@ -146,7 +145,4 @@ public class Producto {
         return Objects.equals(this.categoria, other.categoria);
     }
 
-  
-    
-    
 }

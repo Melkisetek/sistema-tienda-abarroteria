@@ -19,7 +19,8 @@ public class ProductoDAO implements IProductoDAO {
 
         String sql = "SELECT * FROM producto ORDER BY IDProducto";
 
-        try (Connection conn = ConexionBD.getInstancia().getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getInstancia().getConnection(); 
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Producto producto = new Producto();

@@ -21,7 +21,7 @@ public class CategoryDAO implements ICategoryDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Categoria categoria = new Categoria();
-                categoria.setIdCatergoria(rs.getInt("id"));
+                categoria.setIdCatergoria(rs.getLong("id"));
                 categoria.setNombre(rs.getString("nombre"));
                 categoria.setDescripcion(rs.getString("descripcion"));
                 categorias.add(categoria);
@@ -55,7 +55,7 @@ public class CategoryDAO implements ICategoryDAO {
         try (Connection conn = ConexionBD.getInstancia().getConnection(); PreparedStatement psUpdate = conn.prepareStatement(SQL_UPDATE)) {
             psUpdate.setString(1, catModificar.getNombre());
             psUpdate.setString(2, catModificar.getDescripcion());
-            psUpdate.setInt(3, catModificar.getIdCatergoria());
+            psUpdate.setLong(3, catModificar.getIdCatergoria());
             psUpdate.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class CategoryDAO implements ICategoryDAO {
 
         try (Connection conn = ConexionBD.getInstancia().getConnection(); PreparedStatement ps = conn.prepareStatement(SQL_SELECT)) {
             ResultSet rs;
-            ps.setInt(1, buscarCategoria.getIdCatergoria());
+            ps.setLong(1, buscarCategoria.getIdCatergoria());
             rs = ps.executeQuery();
             if (rs.next()) {
                 buscarCategoria.setNombre(rs.getString("nombre"));
@@ -89,7 +89,7 @@ public class CategoryDAO implements ICategoryDAO {
         final String SQL_DELETE = "DELETE FROM categoria WHERE id = ?";
         try(Connection conn = ConexionBD.getInstancia().getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_DELETE)) {
-            ps.setInt(1, categoria.getIdCatergoria());
+            ps.setLong(1, categoria.getIdCatergoria());
             ps.execute();
             return true;
         } catch (SQLException ex) {

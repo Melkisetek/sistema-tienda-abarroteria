@@ -7,52 +7,44 @@ import javax.swing.JTextField;
 import tienda.tiendaabarroteria.controller.SellerController;
 
 public class Seller extends javax.swing.JFrame {
-
+    
     public Seller() {
         initComponents();
         setLocationRelativeTo(this);
         SellerController sellerController = new SellerController(this);
     }
-    
-    // Getters
 
+    // Getters
     public JButton getBtnAgregar() {
         return btnAgregar;
     }
-
-    public JButton getBtnEditar() {
-        return btnEditar;
-    }
-
+    
     public JButton getBtnEliminar() {
         return btnEliminar;
     }
-
+    
     public JButton getBtnLimpiar() {
         return btnLimpiar;
     }
-
+    
     public JTextField getContrasenia() {
         return contrasenia;
     }
-
+    
     public JTable getjTable() {
         return jTable;
     }
-
+    
     public JTextField getNombre() {
         return nombre;
     }
-
+    
     public JComboBox<String> getSexo() {
         return sexo;
     }
     
 
-    public void limpiarCampo(){
-        nombre.setText("");
-        contrasenia.setText("");
-    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,7 +68,6 @@ public class Seller extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         btnLimpiar = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -122,6 +113,11 @@ public class Seller extends javax.swing.JFrame {
                 btnVolverMouseClicked(evt);
             }
         });
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 170, 60));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 170, 700));
@@ -157,6 +153,11 @@ public class Seller extends javax.swing.JFrame {
 
         nombre.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
         nombre.setForeground(new java.awt.Color(0, 128, 128));
+        nombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nombreActionPerformed(evt);
+            }
+        });
         jPanel4.add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 230, 40));
 
         contrasenia.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
@@ -187,25 +188,19 @@ public class Seller extends javax.swing.JFrame {
         btnAgregar.setBackground(new java.awt.Color(0, 128, 128));
         btnAgregar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
-        btnAgregar.setText("AGREGAR");
-        jPanel4.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, 140, 50));
-
-        btnEditar.setBackground(new java.awt.Color(0, 128, 128));
-        btnEditar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        btnEditar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditar.setText("EDITAR");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregar.setText("Guardar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
+                btnAgregarActionPerformed(evt);
             }
         });
-        jPanel4.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 140, 50));
+        jPanel4.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, 140, 50));
 
         btnEliminar.setBackground(new java.awt.Color(0, 128, 128));
         btnEliminar.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("ELIMINAR");
-        jPanel4.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 150, 140, 50));
+        jPanel4.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 150, 140, 50));
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 890, 220));
 
@@ -296,10 +291,11 @@ public class Seller extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDesconectar1ActionPerformed
 
     private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
-       java.awt.EventQueue.invokeLater(() -> {
-            ProductManagement.getInstance().setVisible(true);
-           this.dispose();
-       });
+        java.awt.EventQueue.invokeLater(() -> {
+            ProductManagement gestionarProducto = new ProductManagement();
+            gestionarProducto.setVisible(true);
+            this.dispose();
+        });
     }//GEN-LAST:event_btnVolverMouseClicked
 
     private void sexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sexoActionPerformed
@@ -307,17 +303,24 @@ public class Seller extends javax.swing.JFrame {
     }//GEN-LAST:event_sexoActionPerformed
 
     private void btnLimpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseClicked
-        nombre.setText("");
-        contrasenia.setText("");
+      
     }//GEN-LAST:event_btnLimpiarMouseClicked
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditarActionPerformed
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void nombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nombreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -357,7 +360,6 @@ public class Seller extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnDesconectar1;
-    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnVolver;

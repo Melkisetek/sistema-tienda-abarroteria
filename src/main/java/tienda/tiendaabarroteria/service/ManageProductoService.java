@@ -31,13 +31,12 @@ public class ManageProductoService {
         if (producto.getNombre().matches("\\d+")) {
             throw new Exception("El nombre no puede ser un número.");
         }
-
-        // Si pasa las reglas, llamamos al DAO
+// Si pasa las reglas, llamamos al DAO
         this.dao.agregarProducto(producto);
     }
 
     // Modificar producto
-    public boolean modificarProducto(Producto producto) throws Exception {
+    public void modificarProducto(Producto producto) throws Exception {
 //        //  REGLAS DE NEGOCIO    
         if (producto.getPrecio() <= 0) {
             throw new Exception("El precio no puede ser menor a cero");
@@ -52,22 +51,26 @@ public class ManageProductoService {
             throw new Exception("El nombre no puede ser un número.");
         }
 
+        //this.dao.modificarProducto(producto);
         // Si pasa las reglas, llamamos al DAO
         boolean modificado = this.dao.modificarProducto(producto);
-        if (modificado) {
-            return true;
 
-        } else {
-            System.out.println("Error al modificar Producto");
+        if (!modificado) {
+            throw new Exception("No se pudo modificar producto: " + modificado);
         }
-        return false;
+
     }
 
     public void buscarProductoID(Producto producto) throws Exception {
-        if (producto.getId() != -1) {
-            this.dao.buscarProducto(producto);
-        } else {
-            throw new Exception(" Error al buscar en tabla");
+        if (producto.getId() == null || producto.getId() == -1) {
+            throw new Exception("El ID no es válido para la búsqueda.");
+        }
+
+        // Llamamos al DAO que llena el objeto y retorna true/false
+        boolean encontrado = this.dao.buscarProducto(producto);
+
+        if (!encontrado) {
+            throw new Exception("El producto con ID " + producto.getId() + " no fue encontrado en la base de datos.");
         }
     }
 

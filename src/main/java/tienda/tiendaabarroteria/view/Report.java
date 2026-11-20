@@ -1,4 +1,3 @@
-
 package tienda.tiendaabarroteria.view;
 
 import java.awt.Color;
@@ -10,7 +9,7 @@ import javax.swing.SwingConstants;
 import tienda.tiendaabarroteria.controller.ReportController;
 
 public final class Report extends javax.swing.JFrame {
-    
+
     public Report() {
         initComponents();
         setLocationRelativeTo(this);
@@ -18,9 +17,8 @@ public final class Report extends javax.swing.JFrame {
         areaTextoReporte();
         areaFondoRojo();
     }
-    
-    // Getters
 
+    // Getters
     public JButton getBtnLimpiar() {
         return btnLimpiar;
     }
@@ -44,8 +42,8 @@ public final class Report extends javax.swing.JFrame {
     public JLabel getTxtInfo() {
         return txtInfo;
     }
-    
-    public void areaTextoReporte(){
+
+    public void areaTextoReporte() {
         // Título dinámico del reporte
         txtInfo.setFont(new Font("Arial", Font.ITALIC, 15));
         txtInfo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -56,11 +54,10 @@ public final class Report extends javax.swing.JFrame {
         txtArea.setWrapStyleWord(true); // Ajuste de línea por palabra
         txtArea.setBackground(new Color(250, 255, 250)); // Fondo verde muy  claro
     }
-    
-    public void areaFondoRojo(){
+
+    public void areaFondoRojo() {
         txtArea.setBackground(new Color(255, 250, 250)); // Fondo rojo muy claro
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -121,6 +118,11 @@ public final class Report extends javax.swing.JFrame {
         btnVolver.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnVolverMouseClicked(evt);
+            }
+        });
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
             }
         });
         jPanel2.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 160, 60));
@@ -206,7 +208,8 @@ public final class Report extends javax.swing.JFrame {
 
     private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
         java.awt.EventQueue.invokeLater(() -> {
-             ProductManagement.getInstance().setVisible(true);
+            ProductManagement gestionarProducto = new ProductManagement();
+            gestionarProducto.setVisible(true);
             this.dispose();
         });
     }//GEN-LAST:event_btnVolverMouseClicked
@@ -222,6 +225,10 @@ public final class Report extends javax.swing.JFrame {
     private void btnTotalVendidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTotalVendidoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnTotalVendidoActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
      * @param args the command line arguments

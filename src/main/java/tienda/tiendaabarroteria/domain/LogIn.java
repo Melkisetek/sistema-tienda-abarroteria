@@ -3,7 +3,7 @@ package tienda.tiendaabarroteria.domain;
 import java.util.Objects;
 
 public class LogIn {
-    private int id;
+    private Integer id;
     private String usuario;
     private String contrasenia;
 
@@ -15,17 +15,17 @@ public class LogIn {
         this.contrasenia = contrasenia;
     }
 
-    public LogIn(int id, String usuario, String contrasenia) {
+    public LogIn(Integer id, String usuario, String contrasenia) {
         this.id = id;
         this.usuario = usuario;
         this.contrasenia = contrasenia;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
     
-    public void setId(int id){
+    public void setId(Integer id){
         this.id = id;
     }
     

@@ -1,7 +1,5 @@
 package tienda.tiendaabarroteria.controller;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,32 +13,39 @@ public class CategoryController {
 
     private final Category vista;
     private final CategoryService categoryService;
-    private final Categoria categoria;
-    // 1. Agregar referencia al controlador de productos
-    private final ProductoController productoController;
+    private Long idSeleccionado = null;
 
-    // 2. Modificar el constructor para recibirlo
-    public CategoryController(Category vista, ProductoController productoController) {
+    public CategoryController(Category vista) {
         this.vista = vista;
-        this.productoController = productoController; // Asignar referencia
-
         this.categoryService = new CategoryService();
-        this.categoria = new Categoria();
         cargarTabla();
         iniciarEventos();
     }
 
     private void iniciarEventos() {
-        this.vista.getBtnAgregar().addActionListener(e -> ejecutarGuardado());
-        this.vista.getBtnEditar().addActionListener(e -> ejecutarModificar());
+        // 1. Escuchar los botones principales
+        this.vista.getBtnAgregar().addActionListener(e -> ejecutarGuardadoOActualizar());
         this.vista.getBtnEliminar().addActionListener(e -> ejecutarEliminar());
-        // Seleccionar valores en tabla
-        this.vista.getTable().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cargarDatoEnFormulario();
-            }
+        this.vista.getBtnLimpiar().addActionListener(i -> limpiarCampos());
+        
+        // Presionar enter
+        this.vista.getTextCategoria().addActionListener(e -> ejecutarGuardadoOActualizar());
 
+        // 2. Escuchar la selección en la JTable para cargar el registro automáticamente
+        this.vista.getTable().getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting() && this.vista.getTable().getSelectedRow() != -1) {
+                int filaSeleccionada = this.vista.getTable().getSelectedRow();
+                try {
+                    Object idObj = this.vista.getTable().getValueAt(filaSeleccionada, 0);
+                    if (idObj != null) {
+                        Long id = Long.valueOf(idObj.toString());
+                        seleccionarProductoParaEditar(id);
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(ProductoController.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(vista, "Error al seleccionar el registro: " + ex.getMessage());
+                }
+            }
         });
     }
 
@@ -59,27 +64,42 @@ public class CategoryController {
         }
     }
 
-    private void ejecutarGuardado() {
-        // 1. Obtener datos de la vista
-        String categoriaText = this.vista.getTextCategoria().getText().trim();
-        String areaText = this.vista.getTxtArea().getText().trim();
-        if (categoriaText.isEmpty() || areaText.isEmpty()) {
-            JOptionPane.showMessageDialog(vista, "Error: Los campos no pueden estar vacíos", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    private void ejecutarGuardadoOActualizar() {
+        // 1. Validaciones básicas de la UI
+        if (this.vista.getTextCategoria().getText().trim().isEmpty()) {
+            this.vista.getTextCategoria().requestFocusInWindow();
+            this.mostrarMensaje("Proporcione una categoría.");
+            return;
+        }
+
+        if (this.vista.getTxtArea().getText().trim().isEmpty()) {
+            this.vista.getTxtArea().requestFocusInWindow();
+            this.mostrarMensaje("Proporcione descripción");
             return;
         }
 
         try {
-            // 2. Crear el objeto categoria
-            Categoria nuevoCategoria = new Categoria(categoriaText, areaText);
-            // 3. Delegar la lógica al servicio
-            this.categoryService.agregarCategoria(nuevoCategoria);
-            // 4. Actualizar la interfaz tras éxito
-            this.vista.limpiarCampo();
-            cargarTabla();
-            //  REFRESCAR EL COMBO DEL OTRO CONTROLADOR
-            if (this.productoController != null) {
-                this.productoController.ejecutarObtenerCategorias();
+            String categoriaText = this.vista.getTextCategoria().getText().trim();
+            String areaText = this.vista.getTxtArea().getText().trim();
+            if (this.idSeleccionado == null) {
+                // -- NUEVO REGISTRO (INSERT)
+                // 2. Crear el objeto categoria
+                Categoria nuevoCategoria = new Categoria(categoriaText, areaText);
+                // 3. Delegar la lógica al servicio
+                this.categoryService.agregarCategoria(nuevoCategoria);
+                JOptionPane.showMessageDialog(vista, "Agregado con éxito");
+            } else {
+                // ACTUALIZACIÓN (UPDATE)
+                Categoria categoriaModificar = new Categoria(this.idSeleccionado, categoriaText, areaText);
+                // 4. Delegar la lógica al Service
+                this.categoryService.modificarCategoria(categoriaModificar);
+                JOptionPane.showMessageDialog(vista, "Actualizado con éxito");
             }
+
+            // 4. Actualizar la interfaz tras éxito
+            this.limpiarCampos();
+            cargarTabla();
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista, ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
             // Logger para ver errores 
@@ -87,65 +107,27 @@ public class CategoryController {
         }
     }
 
-    private void cargarDatoEnFormulario() {
-        // 1. Obtener datos de la tabla
-        int filaSeleccionada = vista.getTable().getSelectedRow();
-        DefaultTableModel modelo = (DefaultTableModel) this.vista.getTable().getModel();
-
-        if (filaSeleccionada != -1) {
-            try {
-                // 2. Crear objetos con los datos
-                this.categoria.setIdCatergoria(Integer.parseInt(modelo.getValueAt(filaSeleccionada, 0).toString()));
-                this.categoryService.buscarCategoriaId(categoria);
-
-                // 3. Pasar objeto al método
-                mostrarDatos(this.categoria);
-            } catch (Exception ex) {
-                Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-    }
-
-    private void mostrarDatos(Categoria categoria) {
-        this.vista.getTextID().setText(String.valueOf(categoria.getIdCatergoria()));
-        this.vista.getTextCategoria().setText(categoria.getNombre());
-        this.vista.getTxtArea().setText(categoria.getDescripcion());
-    }
-
-    private void ejecutarModificar() {
-        // 1. Obtener datos de la tabla
-        int filaSeleccionada = vista.getTable().getSelectedRow();
-        DefaultTableModel modelo = (DefaultTableModel) vista.getTable().getModel();
-
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(vista, "Seleccione un registro.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
+    private void seleccionarProductoParaEditar(Long id) {
         try {
-            // 2. Crear objetos con los datos
-            this.categoria.setIdCatergoria(Integer.parseInt(modelo.getValueAt(filaSeleccionada, 0).toString()));
-            this.categoria.setNombre(this.vista.getTextCategoria().getText().trim());
-            this.categoria.setDescripcion(this.vista.getTxtArea().getText().trim());
+            Categoria categoria = new Categoria();
+            categoria.setIdCatergoria(id);
 
-            Categoria categoriaMod = new Categoria(this.categoria.getIdCatergoria(), this.categoria.getNombre(),
-                    this.categoria.getDescripcion());
+            // Consulta fresca a la base de datos a través del Service
+            this.categoryService.buscarCategoriaId(categoria);
 
-            // 3. Delegar la lógica al Service
-            this.categoryService.modificarCategoria(categoriaMod);
-            // 4. Actualizar la interfaz tras éxito
-            this.vista.limpiarCampo();
-            cargarTabla();
+            // Cargar datos obtenidos en los JTextField de la vista
+            this.vista.getTextID().setText(String.valueOf(categoria.getIdCatergoria()));
+            this.vista.getTextCategoria().setText(categoria.getNombre());
+            this.vista.getTxtArea().setText(categoria.getDescripcion());
 
-            //  REFRESCAR EL COMBO DEL OTRO CONTROLADOR
-            if (this.productoController != null) {
-                this.productoController.ejecutarObtenerCategorias();
-            }
+            // Guardar el ID en la variable de control del controlador
+            this.idSeleccionado = id;
+
+            // Cambiar el texto del botón visualmente a "Actualizar"
+            this.vista.getBtnAgregar().setText("Actualizar");
+
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(vista, ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
-            // Logger para ver errores 
-            Logger.getLogger(ProductoController.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(vista, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -164,21 +146,30 @@ public class CategoryController {
             try {
                 // 1. Obtener el ID del registro (suponiendo que está en la columna 0)
                 DefaultTableModel modelo = (DefaultTableModel) vista.getTable().getModel();
-                int idEliminar = (int) modelo.getValueAt(filaSeleccionada, 0);
+                Long idEliminar = (Long) modelo.getValueAt(filaSeleccionada, 0);
                 Categoria eliminarCategoria = new Categoria(idEliminar);
 
                 //2. Lógica de persistencia (Llamada al DAO o Servicio)
                 this.categoryService.eliminarCategoria(eliminarCategoria);
-                this.vista.limpiarCampo();
+                this.limpiarCampos();
                 cargarTabla();
-                //  REFRESCAR EL COMBO DEL OTRO CONTROLADOR
-                if (this.productoController != null) {
-                    this.productoController.ejecutarObtenerCategorias();
-                }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(vista, ex.getMessage());
             }
         }
 
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this.vista, mensaje, "Atención", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void limpiarCampos() {
+        this.vista.getTextID().setText("");
+        this.vista.getTextCategoria().setText("");
+        this.vista.getTxtArea().setText("");
+        this.idSeleccionado = null;
+        this.vista.getBtnAgregar().setText("Guardar");
+        this.vista.getTable().getSelectionModel().clearSelection();
     }
 }
